@@ -1,0 +1,6 @@
+@G3CustomerAPI_HostAddress = http://localhost:5286
+
+GET {{G3CustomerAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
