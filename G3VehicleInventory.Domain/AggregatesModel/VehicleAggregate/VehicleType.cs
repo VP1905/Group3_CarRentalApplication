@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace G3VehicleInventory.Domain.AggregatesModel.VehicleAggregate
 {
-    internal class VehicleType
+    public enum VehicleType
     {
+        Sedan = 1,
+        SUV = 2,
+        Hatchback = 3,
+        Truck = 4,
+        Van = 5
     }
+
 }
