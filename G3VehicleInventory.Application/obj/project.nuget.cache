@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "lh5YwtG3syM=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\vansi\\OneDrive\\Desktop\\Semester_6\\Business_Intelligence\\Final_Project_Programming_Distribution\\GR3_CanRentalApplication\\G3VehicleInventory.Application\\G3VehicleInventory.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\vansi\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\8.0.0\\microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\vansi\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\vansi\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
