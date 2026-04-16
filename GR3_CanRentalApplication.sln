@@ -1,11 +1,36 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.37111.16 d17.14
+VisualStudioVersion = 17.14.37111.16
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservices", "Microservices", "{C612B7CE-5482-4C62-A180-5CB7E4095857}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedKernel", "SharedKernel", "{746390A2-A298-44C3-8890-CE621760B0D4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTesting", "UnitTesting", "{8BD7EA0D-D9C4-491C-B3EB-9F5F7CCF446A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "G3CustomerAPI", "G3CustomerAPI\G3CustomerAPI.csproj", "{474F3F20-BFB7-48E1-ACD4-550818D07B16}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration_Tests", "Integration_Tests", "{DD4F9C93-3E0F-4DAB-BA0C-703F495916F7}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{474F3F20-BFB7-48E1-ACD4-550818D07B16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{474F3F20-BFB7-48E1-ACD4-550818D07B16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{474F3F20-BFB7-48E1-ACD4-550818D07B16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{474F3F20-BFB7-48E1-ACD4-550818D07B16}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{474F3F20-BFB7-48E1-ACD4-550818D07B16} = {C612B7CE-5482-4C62-A180-5CB7E4095857}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35726A6E-DB0D-42BA-8077-8DAB2F94D6D2}
