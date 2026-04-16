@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("G3VehicleInventory.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b895e9fef916d0f9b12846e425fccbd615ccc093")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9e41f1beab565b710d1c2551839643915473f597")]
 [assembly: System.Reflection.AssemblyProductAttribute("G3VehicleInventory.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("G3VehicleInventory.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
