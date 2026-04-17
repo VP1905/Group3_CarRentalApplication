@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "G3CustomerAPI", "G3Customer
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration_Tests", "Integration_Tests", "{DD4F9C93-3E0F-4DAB-BA0C-703F495916F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "G3MaintenanceAPI", "G3MaintenanceAPI\G3MaintenanceAPI.csproj", "{09FCAC5E-2414-E0AF-B790-7F488B0FF48C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,12 +27,17 @@ Global
 		{474F3F20-BFB7-48E1-ACD4-550818D07B16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{474F3F20-BFB7-48E1-ACD4-550818D07B16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{474F3F20-BFB7-48E1-ACD4-550818D07B16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09FCAC5E-2414-E0AF-B790-7F488B0FF48C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09FCAC5E-2414-E0AF-B790-7F488B0FF48C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09FCAC5E-2414-E0AF-B790-7F488B0FF48C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09FCAC5E-2414-E0AF-B790-7F488B0FF48C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{474F3F20-BFB7-48E1-ACD4-550818D07B16} = {C612B7CE-5482-4C62-A180-5CB7E4095857}
+		{09FCAC5E-2414-E0AF-B790-7F488B0FF48C} = {C612B7CE-5482-4C62-A180-5CB7E4095857}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35726A6E-DB0D-42BA-8077-8DAB2F94D6D2}
