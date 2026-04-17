@@ -10,7 +10,6 @@ namespace G3MaintenanceAPI.DTOs
         [Required]
         public int VehicleId { get; set; }
 
-        [Required]
         public DateTime RepairDate { get; set; }
 
         [Required]
