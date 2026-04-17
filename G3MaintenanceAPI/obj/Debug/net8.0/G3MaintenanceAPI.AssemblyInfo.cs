@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("G3MaintenanceAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d364c184b093a7d21c90cf35e5c3575649c9f0b1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d1aa54c8e500f48b8935b35a9918c001af6597b8")]
 [assembly: System.Reflection.AssemblyProductAttribute("G3MaintenanceAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("G3MaintenanceAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
