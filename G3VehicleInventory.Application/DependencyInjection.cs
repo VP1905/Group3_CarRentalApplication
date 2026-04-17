@@ -1,6 +1,6 @@
 ﻿namespace G3VehicleInventory.Application
 {
-    public class Class1
+    public class DependencyInjection
     {
 
     }

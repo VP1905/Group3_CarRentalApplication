@@ -1,5 +1,6 @@
 ﻿using G3VehicleInventory.Application.DTOs;
 using G3VehicleInventory.Application.Interfaces;
+using G3VehicleInventory.Domain.AggregatesModel.VehicleAggregate;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
