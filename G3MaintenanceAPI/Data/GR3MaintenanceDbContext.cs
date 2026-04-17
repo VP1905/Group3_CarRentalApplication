@@ -1,6 +1,5 @@
-﻿using G3MaintenanceAPI.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using G3MaintenanceAPI.Models;
 
 namespace G3MaintenanceAPI.Data
 {
@@ -12,5 +11,12 @@ namespace G3MaintenanceAPI.Data
         }
 
         public DbSet<GR3RepairHistory> RepairHistories { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<GR3RepairHistory>()
+                .Property(r => r.Cost)
+                .HasPrecision(10, 2);
+        }
     }
 }
