@@ -6,21 +6,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace G3MaintenanceAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class GR3MaintenanceController : ControllerBase
+    [Route("api/maintenance")]
+    public class G3MaintenanceController : ControllerBase
     {
         private readonly GR3MaintenanceDbContext _context;
 
-        public GR3MaintenanceController(GR3MaintenanceDbContext context)
+        public G3MaintenanceController(GR3MaintenanceDbContext context)
         {
             _context = context;
         }
 
         [HttpGet("vehicles/{vehicleId}/repairs")]
-        public async Task<ActionResult<IEnumerable<GR3RepairHistoryDto>>> GetRepairsByVehicleId(int vehicleId)
+        public async Task<IActionResult> GetRepairHistory(int vehicleId)
         {
-            var repairs = await _context.RepairHistories
+            var history = await _context.RepairHistories
                 .Where(r => r.VehicleId == vehicleId)
                 .Select(r => new GR3RepairHistoryDto
                 {
@@ -33,73 +33,59 @@ namespace G3MaintenanceAPI.Controllers
                 })
                 .ToListAsync();
 
-            return Ok(repairs);
+            return Ok(history);
         }
 
-        [HttpGet("repairs")]
-        public async Task<ActionResult<IEnumerable<GR3RepairHistoryDto>>> GetAllRepairs()
+        [HttpPost("repairs")]
+        public async Task<IActionResult> AddRepair([FromBody] GR3RepairHistoryDto repair)
         {
-            var repairs = await _context.RepairHistories
-                .Select(r => new GR3RepairHistoryDto
-                {
-                    Id = r.Id,
-                    VehicleId = r.VehicleId,
-                    RepairDate = r.RepairDate,
-                    Description = r.Description,
-                    Cost = r.Cost,
-                    PerformedBy = r.PerformedBy
-                })
-                .ToListAsync();
-
-            return Ok(repairs);
-        }
-
-        [HttpGet("repairs/{id}")]
-        public async Task<ActionResult<GR3RepairHistoryDto>> GetRepairById(int id)
-        {
-            var repair = await _context.RepairHistories.FindAsync(id);
-
-            if (repair == null)
+            if (repair.VehicleId <= 0)
             {
-                return NotFound($"Repair record with ID {id} was not found.");
+                return BadRequest(new
+                {
+                    error = "InvalidParameter",
+                    message = "VehicleId must be greater than zero."
+                });
             }
 
-            var repairDto = new GR3RepairHistoryDto
+            if (string.IsNullOrWhiteSpace(repair.Description))
             {
-                Id = repair.Id,
+                return BadRequest(new
+                {
+                    error = "InvalidParameter",
+                    message = "Description must not be empty."
+                });
+            }
+
+            if (repair.Cost < 0)
+            {
+                return BadRequest(new
+                {
+                    error = "InvalidParameter",
+                    message = "Cost cannot be negative."
+                });
+            }
+
+            var entity = new GR3RepairHistory
+            {
                 VehicleId = repair.VehicleId,
-                RepairDate = repair.RepairDate,
+                RepairDate = DateTime.Now,
                 Description = repair.Description,
                 Cost = repair.Cost,
                 PerformedBy = repair.PerformedBy
             };
 
-            return Ok(repairDto);
-        }
-
-        [HttpPost("repairs")]
-        public async Task<ActionResult<GR3RepairHistoryDto>> CreateRepair([FromBody] GR3RepairHistoryDto repairDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var repair = new GR3RepairHistory
-            {
-                VehicleId = repairDto.VehicleId,
-                RepairDate = repairDto.RepairDate,
-                Description = repairDto.Description,
-                Cost = repairDto.Cost,
-                PerformedBy = repairDto.PerformedBy
-            };
-
-            _context.RepairHistories.Add(repair);
+            _context.RepairHistories.Add(entity);
             await _context.SaveChangesAsync();
 
-            repairDto.Id = repair.Id;
+            repair.Id = entity.Id;
+            repair.RepairDate = entity.RepairDate;
 
-            return CreatedAtAction(nameof(GetRepairById), new { id = repair.Id }, repairDto);
+            return CreatedAtAction(
+                nameof(GetRepairHistory),
+                new { vehicleId = entity.VehicleId },
+                repair
+            );
         }
     }
 }
