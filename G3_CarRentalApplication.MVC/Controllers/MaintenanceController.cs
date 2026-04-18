@@ -1,35 +1,30 @@
 ﻿using G3_CarRentalApplication.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Json;
 
 namespace G3_CarRentalApplication.MVC.Controllers
 {
     public class MaintenanceController : Controller
     {
-        private static List<MaintenanceViewModel> _records = new List<MaintenanceViewModel>
-        {
-            new MaintenanceViewModel
-            {
-                Id = 1,
-                VehicleId = 1,
-                RepairDate = DateTime.Today.AddDays(-10),
-                Description = "Oil change",
-                Cost = 120,
-                PerformedBy = "Mike Auto Shop"
-            },
-            new MaintenanceViewModel
-            {
-                Id = 2,
-                VehicleId = 2,
-                RepairDate = DateTime.Today.AddDays(-5),
-                Description = "Brake service",
-                Cost = 250,
-                PerformedBy = "City Garage"
-            }
-        };
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
 
-        public IActionResult Index()
+        public MaintenanceController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
-            return View(_records);
+            _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
+        }
+
+        private string MaintenanceApiBaseUrl => _configuration["ApiSettings:MaintenanceApiBaseUrl"]!;
+
+        public async Task<IActionResult> Index()
+        {
+            var client = _httpClientFactory.CreateClient();
+
+            var records = await client.GetFromJsonAsync<List<MaintenanceViewModel>>(
+                $"{MaintenanceApiBaseUrl}api/GR3Maintenance");
+
+            return View(records ?? new List<MaintenanceViewModel>());
         }
 
         public IActionResult Create()
@@ -42,21 +37,32 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(MaintenanceViewModel model)
+        public async Task<IActionResult> Create(MaintenanceViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            model.Id = _records.Any() ? _records.Max(x => x.Id) + 1 : 1;
-            _records.Add(model);
+            var client = _httpClientFactory.CreateClient();
+
+            var response = await client.PostAsJsonAsync($"{MaintenanceApiBaseUrl}api/GR3Maintenance", model);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError("", "Unable to create maintenance record.");
+                return View(model);
+            }
 
             TempData["SuccessMessage"] = "Maintenance record added successfully.";
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var record = _records.FirstOrDefault(x => x.Id == id);
+            var client = _httpClientFactory.CreateClient();
+
+            var record = await client.GetFromJsonAsync<MaintenanceViewModel>(
+                $"{MaintenanceApiBaseUrl}api/GR3Maintenance/{id}");
+
             if (record == null)
                 return NotFound();
 
@@ -65,28 +71,32 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(MaintenanceViewModel model)
+        public async Task<IActionResult> Edit(MaintenanceViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            var record = _records.FirstOrDefault(x => x.Id == model.Id);
-            if (record == null)
-                return NotFound();
+            var client = _httpClientFactory.CreateClient();
 
-            record.VehicleId = model.VehicleId;
-            record.RepairDate = model.RepairDate;
-            record.Description = model.Description;
-            record.Cost = model.Cost;
-            record.PerformedBy = model.PerformedBy;
+            var response = await client.PutAsJsonAsync($"{MaintenanceApiBaseUrl}api/GR3Maintenance/{model.Id}", model);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError("", "Unable to update maintenance record.");
+                return View(model);
+            }
 
             TempData["SuccessMessage"] = "Maintenance record updated successfully.";
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var record = _records.FirstOrDefault(x => x.Id == id);
+            var client = _httpClientFactory.CreateClient();
+
+            var record = await client.GetFromJsonAsync<MaintenanceViewModel>(
+                $"{MaintenanceApiBaseUrl}api/GR3Maintenance/{id}");
+
             if (record == null)
                 return NotFound();
 
@@ -95,21 +105,29 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var record = _records.FirstOrDefault(x => x.Id == id);
-            if (record == null)
-                return NotFound();
+            var client = _httpClientFactory.CreateClient();
 
-            _records.Remove(record);
+            var response = await client.DeleteAsync($"{MaintenanceApiBaseUrl}api/GR3Maintenance/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["ErrorMessage"] = "Unable to delete maintenance record.";
+                return RedirectToAction(nameof(Index));
+            }
 
             TempData["SuccessMessage"] = "Maintenance record deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var record = _records.FirstOrDefault(x => x.Id == id);
+            var client = _httpClientFactory.CreateClient();
+
+            var record = await client.GetFromJsonAsync<MaintenanceViewModel>(
+                $"{MaintenanceApiBaseUrl}api/GR3Maintenance/{id}");
+
             if (record == null)
                 return NotFound();
 

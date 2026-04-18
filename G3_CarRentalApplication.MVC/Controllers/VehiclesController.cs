@@ -1,33 +1,30 @@
 ﻿using G3_CarRentalApplication.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Json;
 
 namespace G3_CarRentalApplication.MVC.Controllers
 {
     public class VehiclesController : Controller
     {
-        private static List<VehicleViewModel> _vehicles = new List<VehicleViewModel>
-        {
-            new VehicleViewModel
-            {
-                Id = 1,
-                VehicleCode = "VH001",
-                LocationId = 101,
-                VehicleType = "SUV",
-                Status = "Available"
-            },
-            new VehicleViewModel
-            {
-                Id = 2,
-                VehicleCode = "VH002",
-                LocationId = 102,
-                VehicleType = "Sedan",
-                Status = "Reserved"
-            }
-        };
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
 
-        public IActionResult Index()
+        public VehiclesController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
-            return View(_vehicles);
+            _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
+        }
+
+        private string VehicleApiBaseUrl => _configuration["ApiSettings:VehicleApiBaseUrl"]!;
+
+        public async Task<IActionResult> Index()
+        {
+            var client = _httpClientFactory.CreateClient();
+
+            var vehicles = await client.GetFromJsonAsync<List<VehicleViewModel>>(
+                $"{VehicleApiBaseUrl}api/Vehicles");
+
+            return View(vehicles ?? new List<VehicleViewModel>());
         }
 
         public IActionResult Create()
@@ -37,21 +34,39 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(VehicleViewModel model)
+        public async Task<IActionResult> Create(VehicleViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            model.Id = _vehicles.Any() ? _vehicles.Max(x => x.Id) + 1 : 1;
-            _vehicles.Add(model);
+            var client = _httpClientFactory.CreateClient();
+
+            var createBody = new
+            {
+                vehicleCode = model.VehicleCode,
+                locationId = model.LocationId,
+                vehicleType = model.VehicleType
+            };
+
+            var response = await client.PostAsJsonAsync($"{VehicleApiBaseUrl}api/Vehicles", createBody);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError("", "Unable to create vehicle.");
+                return View(model);
+            }
 
             TempData["SuccessMessage"] = "Vehicle added successfully.";
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var vehicle = _vehicles.FirstOrDefault(x => x.Id == id);
+            var client = _httpClientFactory.CreateClient();
+
+            var vehicle = await client.GetFromJsonAsync<VehicleViewModel>(
+                $"{VehicleApiBaseUrl}api/Vehicles/{id}");
+
             if (vehicle == null)
                 return NotFound();
 
@@ -60,27 +75,32 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(VehicleViewModel model)
+        public async Task<IActionResult> Edit(VehicleViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            var vehicle = _vehicles.FirstOrDefault(x => x.Id == model.Id);
-            if (vehicle == null)
-                return NotFound();
+            var client = _httpClientFactory.CreateClient();
 
-            vehicle.VehicleCode = model.VehicleCode;
-            vehicle.LocationId = model.LocationId;
-            vehicle.VehicleType = model.VehicleType;
-            vehicle.Status = model.Status;
+            var response = await client.PutAsJsonAsync($"{VehicleApiBaseUrl}api/Vehicles/{model.Id}", model);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError("", "Unable to update vehicle.");
+                return View(model);
+            }
 
             TempData["SuccessMessage"] = "Vehicle updated successfully.";
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var vehicle = _vehicles.FirstOrDefault(x => x.Id == id);
+            var client = _httpClientFactory.CreateClient();
+
+            var vehicle = await client.GetFromJsonAsync<VehicleViewModel>(
+                $"{VehicleApiBaseUrl}api/Vehicles/{id}");
+
             if (vehicle == null)
                 return NotFound();
 
@@ -89,21 +109,29 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var vehicle = _vehicles.FirstOrDefault(x => x.Id == id);
-            if (vehicle == null)
-                return NotFound();
+            var client = _httpClientFactory.CreateClient();
 
-            _vehicles.Remove(vehicle);
+            var response = await client.DeleteAsync($"{VehicleApiBaseUrl}api/Vehicles/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["ErrorMessage"] = "Unable to delete vehicle.";
+                return RedirectToAction(nameof(Index));
+            }
 
             TempData["SuccessMessage"] = "Vehicle deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var vehicle = _vehicles.FirstOrDefault(x => x.Id == id);
+            var client = _httpClientFactory.CreateClient();
+
+            var vehicle = await client.GetFromJsonAsync<VehicleViewModel>(
+                $"{VehicleApiBaseUrl}api/Vehicles/{id}");
+
             if (vehicle == null)
                 return NotFound();
 

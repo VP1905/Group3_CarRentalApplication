@@ -1,34 +1,30 @@
 ﻿using G3_CarRentalApplication.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Json;
 
 namespace G3_CarRentalApplication.MVC.Controllers
 {
     public class CustomersController : Controller
     {
-        // Dummy frontend-only data
-        private static List<CustomerViewModel> _customers = new List<CustomerViewModel>
-        {
-            new CustomerViewModel
-            {
-                CustomerId = 1,
-                FirstName = "John",
-                LastName = "Smith",
-                Phone = "111-222-3333",
-                Email = "john@email.com"
-            },
-            new CustomerViewModel
-            {
-                CustomerId = 2,
-                FirstName = "Emma",
-                LastName = "Johnson",
-                Phone = "222-333-4444",
-                Email = "emma@email.com"
-            }
-        };
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
 
-        public IActionResult Index()
+        public CustomersController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
-            return View(_customers);
+            _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
+        }
+
+        private string CustomerApiBaseUrl => _configuration["ApiSettings:CustomerApiBaseUrl"]!;
+
+        public async Task<IActionResult> Index()
+        {
+            var client = _httpClientFactory.CreateClient();
+
+            var customers = await client.GetFromJsonAsync<List<CustomerViewModel>>(
+                $"{CustomerApiBaseUrl}api/G3Customer");
+
+            return View(customers ?? new List<CustomerViewModel>());
         }
 
         public IActionResult Create()
@@ -38,21 +34,31 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CustomerViewModel model)
+        public async Task<IActionResult> Create(CustomerViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            model.CustomerId = _customers.Any() ? _customers.Max(x => x.CustomerId) + 1 : 1;
-            _customers.Add(model);
+            var client = _httpClientFactory.CreateClient();
+
+            var response = await client.PostAsJsonAsync($"{CustomerApiBaseUrl}api/G3Customer", model);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError("", "Unable to create customer.");
+                return View(model);
+            }
 
             TempData["SuccessMessage"] = "Customer added successfully.";
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var customer = _customers.FirstOrDefault(x => x.CustomerId == id);
+            var client = _httpClientFactory.CreateClient();
+
+            var customer = await client.GetFromJsonAsync<CustomerViewModel>(
+                $"{CustomerApiBaseUrl}api/G3Customer/{id}");
 
             if (customer == null)
                 return NotFound();
@@ -62,28 +68,31 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(CustomerViewModel model)
+        public async Task<IActionResult> Edit(CustomerViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            var customer = _customers.FirstOrDefault(x => x.CustomerId == model.CustomerId);
+            var client = _httpClientFactory.CreateClient();
 
-            if (customer == null)
-                return NotFound();
+            var response = await client.PutAsJsonAsync($"{CustomerApiBaseUrl}api/G3Customer/{model.Id}", model);
 
-            customer.FirstName = model.FirstName;
-            customer.LastName = model.LastName;
-            customer.Phone = model.Phone;
-            customer.Email = model.Email;
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError("", "Unable to update customer.");
+                return View(model);
+            }
 
             TempData["SuccessMessage"] = "Customer updated successfully.";
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var customer = _customers.FirstOrDefault(x => x.CustomerId == id);
+            var client = _httpClientFactory.CreateClient();
+
+            var customer = await client.GetFromJsonAsync<CustomerViewModel>(
+                $"{CustomerApiBaseUrl}api/G3Customer/{id}");
 
             if (customer == null)
                 return NotFound();
@@ -93,22 +102,28 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var customer = _customers.FirstOrDefault(x => x.CustomerId == id);
+            var client = _httpClientFactory.CreateClient();
 
-            if (customer == null)
-                return NotFound();
+            var response = await client.DeleteAsync($"{CustomerApiBaseUrl}api/G3Customer/{id}");
 
-            _customers.Remove(customer);
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["ErrorMessage"] = "Unable to delete customer.";
+                return RedirectToAction(nameof(Index));
+            }
 
             TempData["SuccessMessage"] = "Customer deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var customer = _customers.FirstOrDefault(x => x.CustomerId == id);
+            var client = _httpClientFactory.CreateClient();
+
+            var customer = await client.GetFromJsonAsync<CustomerViewModel>(
+                $"{CustomerApiBaseUrl}api/G3Customer/{id}");
 
             if (customer == null)
                 return NotFound();
