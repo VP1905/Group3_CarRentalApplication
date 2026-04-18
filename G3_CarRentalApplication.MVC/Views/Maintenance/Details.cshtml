@@ -1,0 +1,36 @@
+﻿@model G3_CarRentalApplication.MVC.Models.MaintenanceViewModel
+
+@{
+    ViewData["Title"] = "Maintenance Details";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h3 class="mb-0">Maintenance Details</h3>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9">@Model.Id</dd>
+
+                <dt class="col-sm-3">Vehicle ID</dt>
+                <dd class="col-sm-9">@Model.VehicleId</dd>
+
+                <dt class="col-sm-3">Repair Date</dt>
+                <dd class="col-sm-9">@Model.RepairDate.ToString("yyyy-MM-dd")</dd>
+
+                <dt class="col-sm-3">Description</dt>
+                <dd class="col-sm-9">@Model.Description</dd>
+
+                <dt class="col-sm-3">Cost</dt>
+                <dd class="col-sm-9">@Model.Cost</dd>
+
+                <dt class="col-sm-3">Performed By</dt>
+                <dd class="col-sm-9">@Model.PerformedBy</dd>
+            </dl>
+
+            <a asp-action="Index" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+</div>

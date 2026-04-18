@@ -24,18 +24,33 @@
                 <th>Description</th>
                 <th>Cost</th>
                 <th>Performed By</th>
+                <th style="width:240px;">Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @if (Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.VehicleId</td>
+                        <td>@item.RepairDate.ToString("yyyy-MM-dd")</td>
+                        <td>@item.Description</td>
+                        <td>@item.Cost</td>
+                        <td>@item.PerformedBy</td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white">Details</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning text-dark">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td>@item.Id</td>
-                    <td>@item.VehicleId</td>
-                    <td>@item.RepairDate.ToString("yyyy-MM-dd")</td>
-                    <td>@item.Description</td>
-                    <td>@item.Cost</td>
-                    <td>@item.PerformedBy</td>
+                    <td colspan="7" class="text-center text-muted">No maintenance records found.</td>
                 </tr>
             }
         </tbody>

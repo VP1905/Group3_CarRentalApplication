@@ -1,16 +1,18 @@
 ﻿@model G3_CarRentalApplication.MVC.Models.MaintenanceViewModel
 
 @{
-    ViewData["Title"] = "Add Maintenance Record";
+    ViewData["Title"] = "Edit Maintenance Record";
 }
 
 <div class="container mt-4">
     <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h3 class="mb-0">Add Maintenance Record</h3>
+        <div class="card-header bg-warning">
+            <h3 class="mb-0">Edit Maintenance Record</h3>
         </div>
         <div class="card-body">
-            <form asp-action="Create" method="post">
+            <form asp-action="Edit" method="post">
+                <input asp-for="Id" type="hidden" />
+
                 <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
                 <div class="mb-3">
@@ -43,7 +45,7 @@
                     <span asp-validation-for="PerformedBy" class="text-danger"></span>
                 </div>
 
-                <button type="submit" class="btn btn-success">Save</button>
+                <button type="submit" class="btn btn-warning text-dark">Update</button>
                 <a asp-action="Index" class="btn btn-secondary">Back</a>
             </form>
         </div>
