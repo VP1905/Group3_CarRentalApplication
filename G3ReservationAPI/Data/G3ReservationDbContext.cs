@@ -11,5 +11,15 @@ namespace G3ReservationAPI.Data
         }
 
         public DbSet<G3Reservation> Reservations { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.HasDefaultSchema("reservation");
+
+            modelBuilder.Entity<G3Reservation>(entity =>
+            {
+                entity.ToTable("Reservations");
+            });
+        }
     }
 }
