@@ -1,0 +1,51 @@
+﻿@model G3_CarRentalApplication.MVC.Models.VehicleViewModel
+
+@{
+    ViewData["Title"] = "Create Vehicle";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Create Vehicle</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="VehicleCode" class="form-label"></label>
+                    <input asp-for="VehicleCode" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="LocationId" class="form-label"></label>
+                    <input asp-for="LocationId" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="VehicleType" class="form-label"></label>
+                    <input asp-for="VehicleType" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Status" class="form-label"></label>
+                    <select asp-for="Status" class="form-select">
+                        <option value="">-- Select Status --</option>
+                        <option>Available</option>
+                        <option>Reserved</option>
+                        <option>Rented</option>
+                        <option>UnderService</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-success">Save</button>
+                <a asp-action="Index" class="btn btn-secondary">Back</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

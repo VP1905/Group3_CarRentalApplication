@@ -1,0 +1,22 @@
+﻿@model G3_CarRentalApplication.MVC.Models.VehicleViewModel
+
+@{
+    ViewData["Title"] = "Vehicle Details";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h3 class="mb-0">Vehicle Details</h3>
+        </div>
+        <div class="card-body">
+            <p><strong>ID:</strong> @Model.Id</p>
+            <p><strong>Vehicle Code:</strong> @Model.VehicleCode</p>
+            <p><strong>Location:</strong> @Model.LocationId</p>
+            <p><strong>Vehicle Type:</strong> @Model.VehicleType</p>
+            <p><strong>Status:</strong> @Model.Status</p>
+
+            <a asp-action="Index" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+</div>
