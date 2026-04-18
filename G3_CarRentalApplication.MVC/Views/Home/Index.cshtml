@@ -1,8 +1,73 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="mt-4">
+    <h1 class="page-title">Car Rental Dashboard</h1>
+    <p class="text-muted">Manage customers, vehicles, maintenance records, and reservations from one place.</p>
+</div>
+
+<div class="row g-4 section-gap">
+    <div class="col-md-3">
+        <div class="dashboard-card dashboard-blue">
+            <h3>Total Customers</h3>
+            <h2>120</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="dashboard-card dashboard-green">
+            <h3>Available Vehicles</h3>
+            <h2>35</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="dashboard-card dashboard-orange">
+            <h3>Reservations</h3>
+            <h2>18</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="dashboard-card dashboard-red">
+            <h3>Maintenance Jobs</h3>
+            <h2>7</h2>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 section-gap">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-theme-primary">
+                Quick Actions
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap gap-2">
+                    <a asp-controller="Customers" asp-action="Create" class="btn btn-primary">Add Customer</a>
+                    <a asp-controller="Vehicles" asp-action="Create" class="btn btn-success">Add Vehicle</a>
+                    <a asp-controller="Maintenance" asp-action="Create" class="btn btn-warning">Add Maintenance</a>
+                    <a asp-controller="Reservations" asp-action="Index" class="btn btn-danger">New Reservation</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-theme-dark">
+                System Overview
+            </div>
+            <div class="card-body">
+                <p>This frontend demonstrates a clean MVC user interface for the Car Rental Distributed Application.</p>
+                <ul>
+                    <li>Customer Management</li>
+                    <li>Vehicle Inventory</li>
+                    <li>Maintenance Tracking</li>
+                    <li>Reservation Management</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>

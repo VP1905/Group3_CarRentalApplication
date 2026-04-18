@@ -48,9 +48,11 @@
                                 <td>@item.ReservationStatus</td>
                                 <td>@item.VehicleStatus</td>
                                 <td>
-                                    <a asp-action="Details" asp-route-id="@item.ReservationId" class="btn btn-sm btn-info text-white">Details</a>
-                                    <a asp-action="Edit" asp-route-id="@item.ReservationId" class="btn btn-sm btn-warning text-dark">Edit</a>
-                                    <a asp-action="Delete" asp-route-id="@item.ReservationId" class="btn btn-sm btn-danger">Delete</a>
+                                    <div class="action-buttons">
+                                        <a asp-action="Details" asp-route-id="@item.ReservationId" class="btn btn-sm btn-info text-white">Details</a>
+                                        <a asp-action="Edit" asp-route-id="@item.ReservationId" class="btn btn-sm btn-warning text-dark">Edit</a>
+                                        <a asp-action="Delete" asp-route-id="@item.ReservationId" class="btn btn-sm btn-danger">Delete</a>
+                                    </div>
                                 </td>
                             </tr>
                         }

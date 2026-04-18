@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("G3_CarRentalApplication.MVC")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aafc9aaafc8728ab395ed3560fcf1831779a928a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+91be6a35d0576035dbf621fd565b908891761a89")]
 [assembly: System.Reflection.AssemblyProductAttribute("G3_CarRentalApplication.MVC")]
 [assembly: System.Reflection.AssemblyTitleAttribute("G3_CarRentalApplication.MVC")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
