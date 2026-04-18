@@ -1,0 +1,80 @@
+﻿@model G3_CarRentalApplication.MVC.Models.EditReservationViewModel
+
+@{
+    ViewData["Title"] = "Edit Reservation";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-warning">
+            <h3 class="mb-0">Edit Reservation</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                <input asp-for="ReservationId" type="hidden" />
+
+                <div class="mb-3">
+                    <label class="form-label">Customer</label>
+                    <input value="@Model.CustomerFullName" class="form-control" readonly />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Vehicle Code</label>
+                    <input value="@Model.VehicleCode" class="form-control" readonly />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Vehicle Type</label>
+                    <input value="@Model.VehicleType" class="form-control" readonly />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Location</label>
+                    <input value="@Model.LocationId" class="form-control" readonly />
+                </div>
+
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="ReservationStartDate" class="form-label"></label>
+                    <input asp-for="ReservationStartDate" type="date" class="form-control" />
+                    <span asp-validation-for="ReservationStartDate" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ReservationEndDate" class="form-label"></label>
+                    <input asp-for="ReservationEndDate" type="date" class="form-control" />
+                    <span asp-validation-for="ReservationEndDate" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ReservationStatus" class="form-label"></label>
+                    <select asp-for="ReservationStatus" class="form-select">
+                        <option>Reserved</option>
+                        <option>Completed</option>
+                        <option>Cancelled</option>
+                    </select>
+                    <span asp-validation-for="ReservationStatus" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="VehicleStatus" class="form-label"></label>
+                    <select asp-for="VehicleStatus" class="form-select">
+                        <option>Available</option>
+                        <option>Reserved</option>
+                        <option>Rented</option>
+                        <option>UnderService</option>
+                    </select>
+                    <span asp-validation-for="VehicleStatus" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-warning text-dark">Update</button>
+                <a asp-action="History" class="btn btn-secondary">Back</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
