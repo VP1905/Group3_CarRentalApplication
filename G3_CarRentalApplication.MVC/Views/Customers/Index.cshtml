@@ -12,32 +12,49 @@
 
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
     }
 
-    <table class="table table-bordered table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.CustomerId</td>
-                    <td>@item.FullName</td>
-                    <td>@item.Phone</td>
-                    <td>@item.Email</td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.CustomerId" class="btn btn-sm btn-outline-primary">Details</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th style="width: 240px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.CustomerId</td>
+                                <td>@item.FullName</td>
+                                <td>@item.Phone</td>
+                                <td>@item.Email</td>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@item.CustomerId" class="btn btn-sm btn-info text-white">Details</a>
+                                    <a asp-action="Edit" asp-route-id="@item.CustomerId" class="btn btn-sm btn-warning text-dark">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@item.CustomerId" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">No customers found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

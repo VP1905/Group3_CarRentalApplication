@@ -1,16 +1,18 @@
 ﻿@model G3_CarRentalApplication.MVC.Models.CustomerViewModel
 
 @{
-    ViewData["Title"] = "Create Customer";
+    ViewData["Title"] = "Edit Customer";
 }
 
 <div class="container mt-4">
     <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h3 class="mb-0">Add Customer</h3>
+        <div class="card-header bg-warning">
+            <h3 class="mb-0">Edit Customer</h3>
         </div>
         <div class="card-body">
-            <form asp-action="Create" method="post">
+            <form asp-action="Edit" method="post">
+                <input asp-for="CustomerId" type="hidden" />
+
                 <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
                 <div class="mb-3">
@@ -37,7 +39,7 @@
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
 
-                <button type="submit" class="btn btn-success">Save</button>
+                <button type="submit" class="btn btn-warning text-dark">Update</button>
                 <a asp-action="Index" class="btn btn-secondary">Back</a>
             </form>
         </div>
