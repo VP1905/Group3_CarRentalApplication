@@ -10,7 +10,9 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<G3ReservationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        x => x.MigrationsHistoryTable("__EFMigrationsHistory", "reservation"))); 
+        x => x.MigrationsHistoryTable("__EFMigrationsHistory", "reservation")));
+
+builder.Services.AddHttpClient();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

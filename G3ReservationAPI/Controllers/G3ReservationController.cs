@@ -10,30 +10,35 @@ namespace G3ReservationAPI.Controllers
     public class G3ReservationController : ControllerBase
     {
         private readonly G3ReservationDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
 
-        public G3ReservationController(G3ReservationDbContext context)
+        public G3ReservationController(
+            G3ReservationDbContext context,
+            IHttpClientFactory httpClientFactory,
+            IConfiguration configuration)
         {
             _context = context;
+            _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
         }
 
-        // GET: api/G3Reservation
         [HttpGet]
         public async Task<ActionResult<IEnumerable<G3Reservation>>> GetAllReservations()
         {
             return await _context.Reservations.ToListAsync();
         }
 
-        // GET: api/G3Reservation/5
         [HttpGet("{id}")]
         public async Task<ActionResult<G3Reservation>> GetReservationById(int id)
         {
             var reservation = await _context.Reservations.FindAsync(id);
             if (reservation == null)
                 return NotFound();
+
             return reservation;
         }
 
-        // GET: api/G3Reservation/customer/5
         [HttpGet("customer/{customerId}")]
         public async Task<ActionResult<IEnumerable<G3Reservation>>> GetReservationsByCustomer(int customerId)
         {
@@ -42,10 +47,33 @@ namespace G3ReservationAPI.Controllers
                 .ToListAsync();
         }
 
-        // POST: api/G3Reservation
         [HttpPost]
         public async Task<ActionResult<G3Reservation>> CreateReservation(G3Reservation reservation)
         {
+            if (reservation.CustomerId <= 0)
+                return BadRequest("Invalid customer ID.");
+
+            if (reservation.VehicleId <= 0)
+                return BadRequest("Invalid vehicle ID.");
+
+            if (reservation.StartDate >= reservation.EndDate)
+                return BadRequest("Start date must be earlier than end date.");
+
+            var customerApiBase = _configuration["ServiceUrls:CustomerApi"];
+            var vehicleApiBase = _configuration["ServiceUrls:VehicleApi"];
+
+            var client = _httpClientFactory.CreateClient();
+
+            // Check customer exists
+            var customerResponse = await client.GetAsync($"{customerApiBase}/api/G3Customer/{reservation.CustomerId}");
+            if (!customerResponse.IsSuccessStatusCode)
+                return BadRequest("Customer does not exist.");
+
+            // Check vehicle exists
+            var vehicleResponse = await client.GetAsync($"{vehicleApiBase}/api/Vehicles/{reservation.VehicleId}");
+            if (!vehicleResponse.IsSuccessStatusCode)
+                return BadRequest("Vehicle does not exist.");
+
             // Check if vehicle is already reserved
             bool isReserved = await _context.Reservations
                 .AnyAsync(r => r.VehicleId == reservation.VehicleId && r.Status == "Active");
@@ -62,7 +90,6 @@ namespace G3ReservationAPI.Controllers
             return CreatedAtAction(nameof(GetReservationById), new { id = reservation.Id }, reservation);
         }
 
-        // PUT: api/G3Reservation/5/cancel
         [HttpPut("{id}/cancel")]
         public async Task<IActionResult> CancelReservation(int id)
         {

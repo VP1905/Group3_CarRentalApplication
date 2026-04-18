@@ -6,10 +6,10 @@ namespace G3ReservationAPI.Models
     {
         public int Id { get; set; }
 
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "CustomerId must be greater than 0.")]
         public int CustomerId { get; set; }
 
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "VehicleId must be greater than 0.")]
         public int VehicleId { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
