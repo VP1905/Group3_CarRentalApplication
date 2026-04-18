@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\vansi\\OneDrive\\Desktop\\Semester_6\\Business_Intelligence\\Final_Project_Programming_Distribution\\GR3_CanRentalApplication\\G3CustomerAPI\\G3CustomerAPI.csproj": {}
+    "C:\\Users\\dizza\\Group3_CarRentalApplication\\G3CustomerAPI\\G3CustomerAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\vansi\\OneDrive\\Desktop\\Semester_6\\Business_Intelligence\\Final_Project_Programming_Distribution\\GR3_CanRentalApplication\\G3CustomerAPI\\G3CustomerAPI.csproj": {
+    "C:\\Users\\dizza\\Group3_CarRentalApplication\\G3CustomerAPI\\G3CustomerAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\vansi\\OneDrive\\Desktop\\Semester_6\\Business_Intelligence\\Final_Project_Programming_Distribution\\GR3_CanRentalApplication\\G3CustomerAPI\\G3CustomerAPI.csproj",
+        "projectUniqueName": "C:\\Users\\dizza\\Group3_CarRentalApplication\\G3CustomerAPI\\G3CustomerAPI.csproj",
         "projectName": "G3CustomerAPI",
-        "projectPath": "C:\\Users\\vansi\\OneDrive\\Desktop\\Semester_6\\Business_Intelligence\\Final_Project_Programming_Distribution\\GR3_CanRentalApplication\\G3CustomerAPI\\G3CustomerAPI.csproj",
-        "packagesPath": "C:\\Users\\vansi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\vansi\\OneDrive\\Desktop\\Semester_6\\Business_Intelligence\\Final_Project_Programming_Distribution\\GR3_CanRentalApplication\\G3CustomerAPI\\obj\\",
+        "projectPath": "C:\\Users\\dizza\\Group3_CarRentalApplication\\G3CustomerAPI\\G3CustomerAPI.csproj",
+        "packagesPath": "C:\\Users\\dizza\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dizza\\Group3_CarRentalApplication\\G3CustomerAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\vansi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\dizza\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -50,6 +50,22 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.20, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.20, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.20, )"
+            },
             "Microsoft.Extensions.Configuration.Abstractions": {
               "target": "Package",
               "version": "[8.0.0, )"
