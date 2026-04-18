@@ -1,9 +1,14 @@
+using G3ReservationAPI.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddDbContext<G3ReservationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("G3ReservationDb")));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
