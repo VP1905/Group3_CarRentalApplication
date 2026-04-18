@@ -16,7 +16,7 @@ namespace G3VehicleInventory.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Vehicle>(static entity =>
+            modelBuilder.Entity<Vehicle>(entity =>
             {
                 entity.ToTable("Vehicles");
 
@@ -61,9 +61,9 @@ namespace G3VehicleInventory.Infrastructure.Data
             });
         }
 
-        internal async Task SaveChangesAsync()
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return base.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("G3ReservationAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+374b18f9bae5880793734feba64fd628a00abee9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+89695be16dbc85d557c0ae1eed21a06b2810ae9a")]
 [assembly: System.Reflection.AssemblyProductAttribute("G3ReservationAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("G3ReservationAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
