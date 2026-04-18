@@ -1,0 +1,95 @@
+[
+  {
+    "ContainingType": "G3CustomerAPI.Controllers.G3CustomerController",
+    "Method": "GetAllCustomers",
+    "RelativePath": "api/G3Customer",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[G3CustomerAPI.Models.G3Customer, G3CustomerAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "G3CustomerAPI.Controllers.G3CustomerController",
+    "Method": "AddCustomer",
+    "RelativePath": "api/G3Customer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "customer",
+        "Type": "G3CustomerAPI.Models.G3Customer",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "G3CustomerAPI.Models.G3Customer",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "G3CustomerAPI.Controllers.G3CustomerController",
+    "Method": "GetCustomerById",
+    "RelativePath": "api/G3Customer/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "G3CustomerAPI.Models.G3Customer",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "G3CustomerAPI.Controllers.G3CustomerController",
+    "Method": "UpdateCustomer",
+    "RelativePath": "api/G3Customer/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "customer",
+        "Type": "G3CustomerAPI.Models.G3Customer",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
