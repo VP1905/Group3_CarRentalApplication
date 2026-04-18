@@ -13,6 +13,7 @@ builder.Services.AddDbContext<GR3MaintenanceDbContext>(options =>
         x => x.MigrationsHistoryTable("__EFMigrationsHistory", "maintenance")));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddHttpClient();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

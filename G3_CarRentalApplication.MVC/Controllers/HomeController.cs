@@ -1,32 +1,60 @@
 using G3_CarRentalApplication.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using System.Net.Http.Json;
 
 namespace G3_CarRentalApplication.MVC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
-            _logger = logger;
+            _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        private string CustomerApiBaseUrl => _configuration["ApiSettings:CustomerApiBaseUrl"]!;
+        private string VehicleApiBaseUrl => _configuration["ApiSettings:VehicleApiBaseUrl"]!;
+        private string MaintenanceApiBaseUrl => _configuration["ApiSettings:MaintenanceApiBaseUrl"]!;
+        private string ReservationApiBaseUrl => _configuration["ApiSettings:ReservationApiBaseUrl"]!;
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            var model = new DashboardViewModel();
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var client = _httpClientFactory.CreateClient();
+
+            try
+            {
+                // Customers
+                var customers = await client.GetFromJsonAsync<List<CustomerViewModel>>(
+                    $"{CustomerApiBaseUrl}api/G3Customer");
+                model.TotalCustomers = customers?.Count ?? 0;
+
+                // Vehicles
+                var vehicles = await client.GetFromJsonAsync<List<VehicleViewModel>>(
+                    $"{VehicleApiBaseUrl}api/Vehicles");
+                model.AvailableVehicles = vehicles?.Count(v =>
+                    v.Status != null && v.Status.Equals("Available", StringComparison.OrdinalIgnoreCase)) ?? 0;
+
+                // Maintenance
+                var maintenanceRecords = await client.GetFromJsonAsync<List<MaintenanceViewModel>>(
+                    $"{MaintenanceApiBaseUrl}api/maintenance");
+                model.TotalMaintenanceJobs = maintenanceRecords?.Count ?? 0;
+
+                // Reservations
+                var reservations = await client.GetFromJsonAsync<List<ReservationPageViewModel>>(
+                    $"{ReservationApiBaseUrl}api/G3Reservation");
+                model.TotalReservations = reservations?.Count ?? 0;
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Unable to load dashboard data: {ex.Message}";
+            }
+
+            return View(model);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿@{
+﻿@model G3_CarRentalApplication.MVC.Models.DashboardViewModel
+
+@{
     ViewData["Title"] = "Dashboard";
 }
 
@@ -11,28 +13,28 @@
     <div class="col-md-3">
         <div class="dashboard-card dashboard-blue">
             <h3>Total Customers</h3>
-            <h2>120</h2>
+            <h2>@Model.TotalCustomers</h2>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="dashboard-card dashboard-green">
             <h3>Available Vehicles</h3>
-            <h2>35</h2>
+            <h2>@Model.AvailableVehicles</h2>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="dashboard-card dashboard-orange">
             <h3>Reservations</h3>
-            <h2>18</h2>
+            <h2>@Model.TotalReservations</h2>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="dashboard-card dashboard-red">
             <h3>Maintenance Jobs</h3>
-            <h2>7</h2>
+            <h2>@Model.TotalMaintenanceJobs</h2>
         </div>
     </div>
 </div>
