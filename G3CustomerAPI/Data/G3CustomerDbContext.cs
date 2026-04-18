@@ -11,5 +11,11 @@ namespace G3CustomerAPI.Data
         }
 
         public DbSet<G3Customer> Customers { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.HasDefaultSchema("customer");
+            modelBuilder.Entity<G3Customer>().ToTable("Customers");
+        }
     }
 }
