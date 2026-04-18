@@ -1,4 +1,4 @@
-﻿using System;
+﻿            using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +10,10 @@ namespace G3VehicleInventory.Domain.AggregatesModel.VehicleAggregate
     {
         Sedan = 1,
         SUV = 2,
-        Hatchback = 3,
+        Electric = 3,
         Truck = 4,
-        Van = 5
+        Van = 5,
+        Luxury= 6
     }
 
 }

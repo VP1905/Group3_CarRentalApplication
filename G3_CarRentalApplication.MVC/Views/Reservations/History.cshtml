@@ -22,13 +22,9 @@
                     <tr>
                         <th>ID</th>
                         <th>Customer</th>
-                        <th>Vehicle Code</th>
-                        <th>Vehicle Type</th>
-                        <th>Location</th>
                         <th>Start</th>
                         <th>End</th>
                         <th>Reservation Status</th>
-                        <th>Vehicle Status</th>
                         <th style="width:240px;">Actions</th>
                     </tr>
                 </thead>
@@ -40,13 +36,9 @@
                             <tr>
                                 <td>@item.ReservationId</td>
                                 <td>@item.CustomerFullName</td>
-                                <td>@item.VehicleCode</td>
-                                <td>@item.VehicleType</td>
-                                <td>@item.LocationId</td>
                                 <td>@item.ReservationStartDate.ToString("yyyy-MM-dd")</td>
                                 <td>@item.ReservationEndDate.ToString("yyyy-MM-dd")</td>
                                 <td>@item.ReservationStatus</td>
-                                <td>@item.VehicleStatus</td>
                                 <td>
                                     <div class="action-buttons">
                                         <a asp-action="Details" asp-route-id="@item.ReservationId" class="btn btn-sm btn-info text-white">Details</a>
@@ -60,7 +52,7 @@
                     else
                     {
                         <tr>
-                            <td colspan="10" class="text-center text-muted">No reservations found.</td>
+                            <td colspan="6" class="text-center text-muted">No reservations found.</td>
                         </tr>
                     }
                 </tbody>

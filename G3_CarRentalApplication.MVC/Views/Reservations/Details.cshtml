@@ -17,15 +17,6 @@
                 <dt class="col-sm-3">Customer</dt>
                 <dd class="col-sm-9">@Model.CustomerFullName</dd>
 
-                <dt class="col-sm-3">Vehicle Code</dt>
-                <dd class="col-sm-9">@Model.VehicleCode</dd>
-
-                <dt class="col-sm-3">Vehicle Type</dt>
-                <dd class="col-sm-9">@Model.VehicleType</dd>
-
-                <dt class="col-sm-3">Location</dt>
-                <dd class="col-sm-9">@Model.LocationId</dd>
-
                 <dt class="col-sm-3">Start Date</dt>
                 <dd class="col-sm-9">@Model.ReservationStartDate.ToString("yyyy-MM-dd")</dd>
 
@@ -34,9 +25,6 @@
 
                 <dt class="col-sm-3">Reservation Status</dt>
                 <dd class="col-sm-9">@Model.ReservationStatus</dd>
-
-                <dt class="col-sm-3">Vehicle Status</dt>
-                <dd class="col-sm-9">@Model.VehicleStatus</dd>
             </dl>
 
             <a asp-action="History" class="btn btn-secondary">Back</a>

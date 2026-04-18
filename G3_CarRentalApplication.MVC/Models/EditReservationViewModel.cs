@@ -5,7 +5,8 @@ namespace G3_CarRentalApplication.MVC.Models
     public class EditReservationViewModel
     {
         public int ReservationId { get; set; }
-
+        public int CustomerId { get; set; }
+        public int VehicleId { get; set; }
         public string CustomerFirstName { get; set; } = "";
         public string CustomerLastName { get; set; } = "";
         public string VehicleCode { get; set; } = "";

@@ -12,25 +12,12 @@
         <div class="card-body">
             <form asp-action="Edit" method="post">
                 <input asp-for="ReservationId" type="hidden" />
+                <input asp-for="CustomerId" type="hidden" />
+                <input asp-for="VehicleId" type="hidden" />
 
                 <div class="mb-3">
                     <label class="form-label">Customer</label>
                     <input value="@Model.CustomerFullName" class="form-control" readonly />
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Vehicle Code</label>
-                    <input value="@Model.VehicleCode" class="form-control" readonly />
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Vehicle Type</label>
-                    <input value="@Model.VehicleType" class="form-control" readonly />
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Location</label>
-                    <input value="@Model.LocationId" class="form-control" readonly />
                 </div>
 
                 <div asp-validation-summary="All" class="text-danger mb-3"></div>
@@ -50,22 +37,13 @@
                 <div class="mb-3">
                     <label asp-for="ReservationStatus" class="form-label"></label>
                     <select asp-for="ReservationStatus" class="form-select">
-                        <option>Reserved</option>
+                        <option>Active</option>
+                        <option>Confirmed</option>
+                        <option>Pending</option>
                         <option>Completed</option>
                         <option>Cancelled</option>
                     </select>
                     <span asp-validation-for="ReservationStatus" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="VehicleStatus" class="form-label"></label>
-                    <select asp-for="VehicleStatus" class="form-select">
-                        <option>Available</option>
-                        <option>Reserved</option>
-                        <option>Rented</option>
-                        <option>UnderService</option>
-                    </select>
-                    <span asp-validation-for="VehicleStatus" class="text-danger"></span>
                 </div>
 
                 <button type="submit" class="btn btn-warning text-dark">Update</button>
