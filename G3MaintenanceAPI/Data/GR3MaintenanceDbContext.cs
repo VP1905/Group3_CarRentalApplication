@@ -14,9 +14,15 @@ namespace G3MaintenanceAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<GR3RepairHistory>()
-                .Property(r => r.Cost)
-                .HasPrecision(10, 2);
+            modelBuilder.HasDefaultSchema("maintenance");
+
+            modelBuilder.Entity<GR3RepairHistory>(entity =>
+            {
+                entity.ToTable("RepairHistories");
+
+                entity.Property(r => r.Cost)
+                      .HasPrecision(10, 2);
+            });
         }
     }
 }

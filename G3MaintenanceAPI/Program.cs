@@ -8,7 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<GR3MaintenanceDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("GR3MaintenanceDb")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        x => x.MigrationsHistoryTable("__EFMigrationsHistory", "maintenance")));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
