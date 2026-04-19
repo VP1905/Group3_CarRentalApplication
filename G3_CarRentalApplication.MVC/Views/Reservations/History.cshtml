@@ -15,6 +15,11 @@
         <div class="alert alert-success">@TempData["SuccessMessage"]</div>
     }
 
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
     <div class="card shadow-sm">
         <div class="card-body">
             <table class="table table-bordered table-hover align-middle">
@@ -22,29 +27,39 @@
                     <tr>
                         <th>ID</th>
                         <th>Customer</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Reservation Status</th>
-                        <th style="width:240px;">Actions</th>
+                        <th>Vehicle</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th style="width:180px;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Model.Any())
+                    @if (Model != null && Model.Any())
                     {
                         @foreach (var item in Model)
                         {
                             <tr>
                                 <td>@item.ReservationId</td>
                                 <td>@item.CustomerFullName</td>
+                                <td>@item.VehicleCode</td>
                                 <td>@item.ReservationStartDate.ToString("yyyy-MM-dd")</td>
                                 <td>@item.ReservationEndDate.ToString("yyyy-MM-dd")</td>
                                 <td>@item.ReservationStatus</td>
                                 <td>
-                                    <div class="action-buttons">
-                                        <a asp-action="Details" asp-route-id="@item.ReservationId" class="btn btn-sm btn-info text-white">Details</a>
-                                        <a asp-action="Edit" asp-route-id="@item.ReservationId" class="btn btn-sm btn-warning text-dark">Edit</a>
-                                        <a asp-action="Delete" asp-route-id="@item.ReservationId" class="btn btn-sm btn-danger">Delete</a>
-                                    </div>
+                                    <a asp-action="Details" asp-route-id="@item.ReservationId" class="btn btn-sm btn-info text-white">
+                                        Details
+                                    </a>
+
+                                    @if (item.ReservationStatus == "Active")
+                                    {
+                                        <form asp-action="Cancel" asp-route-id="@item.ReservationId" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                Cancel
+                                            </button>
+                                        </form>
+                                    }
                                 </td>
                             </tr>
                         }
@@ -52,7 +67,7 @@
                     else
                     {
                         <tr>
-                            <td colspan="6" class="text-center text-muted">No reservations found.</td>
+                            <td colspan="7" class="text-center text-muted">No reservations found.</td>
                         </tr>
                     }
                 </tbody>

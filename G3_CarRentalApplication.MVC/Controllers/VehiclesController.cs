@@ -29,7 +29,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            return View(new VehicleViewModel());
         }
 
         [HttpPost]
@@ -52,7 +52,8 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                ModelState.AddModelError("", "Unable to create vehicle.");
+                var error = await response.Content.ReadAsStringAsync();
+                ModelState.AddModelError("", $"Unable to create vehicle. {error}");
                 return View(model);
             }
 
@@ -82,15 +83,23 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
             var client = _httpClientFactory.CreateClient();
 
-            var response = await client.PutAsJsonAsync($"{VehicleApiBaseUrl}api/Vehicles/{model.Id}", model);
+            var updateBody = new
+            {
+                status = model.Status
+            };
+
+            var response = await client.PutAsJsonAsync(
+                $"{VehicleApiBaseUrl}api/Vehicles/{model.Id}/status",
+                updateBody);
 
             if (!response.IsSuccessStatusCode)
             {
-                ModelState.AddModelError("", "Unable to update vehicle.");
+                var error = await response.Content.ReadAsStringAsync();
+                ModelState.AddModelError("", $"Unable to update vehicle status. {error}");
                 return View(model);
             }
 
-            TempData["SuccessMessage"] = "Vehicle updated successfully.";
+            TempData["SuccessMessage"] = "Vehicle status updated successfully.";
             return RedirectToAction(nameof(Index));
         }
 

@@ -1,41 +1,42 @@
 ﻿@model G3_CarRentalApplication.MVC.Models.VehicleViewModel
 
 @{
-    ViewData["Title"] = "Edit Vehicle";
+    ViewData["Title"] = "Edit Vehicle Status";
 }
 
 <div class="container mt-4">
     <div class="card shadow-sm">
         <div class="card-header bg-warning">
-            <h3 class="mb-0">Edit Vehicle</h3>
+            <h3 class="mb-0">Edit Vehicle Status</h3>
         </div>
         <div class="card-body">
             <form asp-action="Edit" method="post">
                 <input asp-for="Id" type="hidden" />
+                <input asp-for="VehicleCode" type="hidden" />
+                <input asp-for="LocationId" type="hidden" />
+                <input asp-for="VehicleType" type="hidden" />
 
                 <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
                 <div class="mb-3">
-                    <label asp-for="VehicleCode" class="form-label"></label>
-                    <input asp-for="VehicleCode" class="form-control" />
-                    <span asp-validation-for="VehicleCode" class="text-danger"></span>
+                    <label class="form-label">Vehicle Code</label>
+                    <input value="@Model.VehicleCode" class="form-control" readonly />
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="LocationId" class="form-label"></label>
-                    <input asp-for="LocationId" class="form-control" />
-                    <span asp-validation-for="LocationId" class="text-danger"></span>
+                    <label class="form-label">Location</label>
+                    <input value="@Model.LocationId" class="form-control" readonly />
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="VehicleType" class="form-label"></label>
-                    <input asp-for="VehicleType" class="form-control" />
-                    <span asp-validation-for="VehicleType" class="text-danger"></span>
+                    <label class="form-label">Vehicle Type</label>
+                    <input value="@Model.VehicleType" class="form-control" readonly />
                 </div>
 
                 <div class="mb-3">
                     <label asp-for="Status" class="form-label"></label>
                     <select asp-for="Status" class="form-select">
+                        <option value="">-- Select Status --</option>
                         <option>Available</option>
                         <option>Reserved</option>
                         <option>Rented</option>

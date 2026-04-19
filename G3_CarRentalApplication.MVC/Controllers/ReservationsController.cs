@@ -41,7 +41,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
         {
             if (model.Reservation.ReservationEndDate <= model.Reservation.ReservationStartDate)
             {
-                ModelState.AddModelError(string.Empty, "End date must be greater than start date.");
+                ModelState.AddModelError("", "End date must be greater than start date.");
             }
 
             if (!ModelState.IsValid)
@@ -61,11 +61,14 @@ namespace G3_CarRentalApplication.MVC.Controllers
                 status = "Active"
             };
 
-            var response = await client.PostAsJsonAsync($"{ReservationApiBaseUrl}api/G3Reservation", requestBody);
+            var response = await client.PostAsJsonAsync(
+                $"{ReservationApiBaseUrl}api/G3Reservation",
+                requestBody);
 
             if (!response.IsSuccessStatusCode)
             {
-                model.ErrorMessage = "Unable to create reservation.";
+                var error = await response.Content.ReadAsStringAsync();
+                model.ErrorMessage = $"Unable to create reservation. {error}";
                 await LoadApiData(model);
                 return View(model);
             }
@@ -75,6 +78,45 @@ namespace G3_CarRentalApplication.MVC.Controllers
         }
 
         public async Task<IActionResult> History()
+        {
+            var model = await BuildReservationHistoryAsync();
+            return View(model);
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var reservations = await BuildReservationHistoryAsync();
+            var reservation = reservations.FirstOrDefault(r => r.ReservationId == id);
+
+            if (reservation == null)
+                return NotFound();
+
+            return View(reservation);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cancel(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+
+            var response = await client.PutAsync(
+                $"{ReservationApiBaseUrl}api/G3Reservation/{id}/cancel",
+                null);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["ErrorMessage"] = "Unable to cancel reservation.";
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Reservation cancelled successfully.";
+            }
+
+            return RedirectToAction(nameof(History));
+        }
+
+        private async Task<List<ReservationHistoryViewModel>> BuildReservationHistoryAsync()
         {
             var client = _httpClientFactory.CreateClient();
 
@@ -87,7 +129,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
             var vehicles = await client.GetFromJsonAsync<List<VehicleViewModel>>(
                 $"{VehicleApiBaseUrl}api/Vehicles") ?? new List<VehicleViewModel>();
 
-            var model = reservations.Select(r =>
+            return reservations.Select(r =>
             {
                 var customer = customers.FirstOrDefault(c => c.Id == r.CustomerId);
                 var vehicle = vehicles.FirstOrDefault(v => v.Id == r.VehicleId);
@@ -108,8 +150,6 @@ namespace G3_CarRentalApplication.MVC.Controllers
                     ReservationStatus = r.Status
                 };
             }).ToList();
-
-            return View(model);
         }
 
         private async Task LoadApiData(ReservationPageViewModel model)
@@ -128,11 +168,13 @@ namespace G3_CarRentalApplication.MVC.Controllers
                 Text = $"{c.FirstName} {c.LastName}"
             }).ToList();
 
-            model.Vehicles = vehicles.Select(v => new SelectListItem
-            {
-                Value = v.Id.ToString(),
-                Text = $"{v.VehicleCode} - {v.VehicleType} - Location {v.LocationId}"
-            }).ToList();
+            model.Vehicles = vehicles
+                .Where(v => string.Equals(v.Status, "Available", StringComparison.OrdinalIgnoreCase))
+                .Select(v => new SelectListItem
+                {
+                    Value = v.Id.ToString(),
+                    Text = $"{v.VehicleCode} - {v.VehicleType} - Location {v.LocationId}"
+                }).ToList();
         }
 
         private class ReservationApiModel
