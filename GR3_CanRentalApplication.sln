@@ -31,6 +31,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "G3VehicleInventory.Domain",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "G3VehicleInventory.WebAPI", "G3VehicleInventory.WebAPI\G3VehicleInventory.WebAPI.csproj", "{768970C7-C197-4EDF-9140-22CCB9961EF5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "APIGateway", "APIGateway", "{67D91989-3F00-4C83-97F7-9115BF4ED326}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "G3_CarRentalApplication.Gateway", "G3_CarRentalApplication.Gateway\G3_CarRentalApplication.Gateway.csproj", "{6704EC07-1591-453D-B141-C3234C3D4460}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +73,10 @@ Global
 		{768970C7-C197-4EDF-9140-22CCB9961EF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{768970C7-C197-4EDF-9140-22CCB9961EF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{768970C7-C197-4EDF-9140-22CCB9961EF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6704EC07-1591-453D-B141-C3234C3D4460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6704EC07-1591-453D-B141-C3234C3D4460}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6704EC07-1591-453D-B141-C3234C3D4460}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6704EC07-1591-453D-B141-C3234C3D4460}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +91,7 @@ Global
 		{E5B4FA3C-B596-4C3D-9214-FC810F93E07B} = {F1A6F59F-3840-4137-9E2D-94273D4FC979}
 		{E92AB101-8385-4E81-84E5-1471795D67E3} = {F1A6F59F-3840-4137-9E2D-94273D4FC979}
 		{768970C7-C197-4EDF-9140-22CCB9961EF5} = {F1A6F59F-3840-4137-9E2D-94273D4FC979}
+		{6704EC07-1591-453D-B141-C3234C3D4460} = {67D91989-3F00-4C83-97F7-9115BF4ED326}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35726A6E-DB0D-42BA-8077-8DAB2F94D6D2}
