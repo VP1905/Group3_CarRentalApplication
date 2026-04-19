@@ -63,6 +63,8 @@ namespace G3ReservationAPI.Controllers
             var vehicleApiBase = _configuration["ServiceUrls:VehicleApi"];
 
             var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Remove("X-Internal-Gateway");
+            client.DefaultRequestHeaders.Add("X-Internal-Gateway", _configuration["GatewayAccess:InternalSecret"]!);
 
             // Check customer exists
             var customerResponse = await client.GetAsync($"{customerApiBase}/api/G3Customer/{reservation.CustomerId}");
