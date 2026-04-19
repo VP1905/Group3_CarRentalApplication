@@ -40,6 +40,8 @@ namespace G3_CarRentalApplication.MVC.Controllers
                 return View(model);
 
             var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Remove("X-Api-Key");
+            client.DefaultRequestHeaders.Add("X-Api-Key", _configuration["ApiSettings:ApiKey"]);
 
             var response = await client.PostAsJsonAsync($"{GatewayBaseUrl}gateway/customers/api/G3Customer", model);
 
