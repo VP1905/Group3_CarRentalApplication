@@ -15,14 +15,14 @@ namespace G3_CarRentalApplication.MVC.Controllers
             _configuration = configuration;
         }
 
-        private string MaintenanceApiBaseUrl => _configuration["ApiSettings:MaintenanceApiBaseUrl"]!;
+        private string GatewayBaseUrl => _configuration["ApiSettings:GatewayBaseUrl"]!;
 
         public async Task<IActionResult> Index()
         {
             var client = _httpClientFactory.CreateClient();
 
             var records = await client.GetFromJsonAsync<List<MaintenanceViewModel>>(
-                $"{MaintenanceApiBaseUrl}api/maintenance");
+                $"{GatewayBaseUrl}gateway/maintenance/api/maintenance");
 
             return View(records ?? new List<MaintenanceViewModel>());
         }
@@ -44,7 +44,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
             var client = _httpClientFactory.CreateClient();
 
-            var response = await client.PostAsJsonAsync($"{MaintenanceApiBaseUrl}api/maintenance", model);
+            var response = await client.PostAsJsonAsync($"{GatewayBaseUrl}gateway/maintenance/api/maintenance", model);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -61,7 +61,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
             var client = _httpClientFactory.CreateClient();
 
             var record = await client.GetFromJsonAsync<MaintenanceViewModel>(
-                $"{MaintenanceApiBaseUrl}api/maintenance/{id}");
+                $"{GatewayBaseUrl}gateway/maintenance/api/maintenance/{id}");
 
             if (record == null)
                 return NotFound();
@@ -78,7 +78,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
             var client = _httpClientFactory.CreateClient();
 
-            var response = await client.PutAsJsonAsync($"{MaintenanceApiBaseUrl}api/maintenance/{model.Id}", model);
+            var response = await client.PutAsJsonAsync($"{GatewayBaseUrl}gateway/maintenance/api/maintenance/{model.Id}", model);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -95,7 +95,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
             var client = _httpClientFactory.CreateClient();
 
             var record = await client.GetFromJsonAsync<MaintenanceViewModel>(
-                $"{MaintenanceApiBaseUrl}api/maintenance/{id}");
+                $"{GatewayBaseUrl}gateway/maintenance/api/maintenance/{id}");
 
             if (record == null)
                 return NotFound();
@@ -109,7 +109,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
         {
             var client = _httpClientFactory.CreateClient();
 
-            var response = await client.DeleteAsync($"{MaintenanceApiBaseUrl}api/maintenance/{id}");
+            var response = await client.DeleteAsync($"{GatewayBaseUrl}gateway/maintenance/api/maintenance/{id}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -126,7 +126,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
             var client = _httpClientFactory.CreateClient();
 
             var record = await client.GetFromJsonAsync<MaintenanceViewModel>(
-                $"{MaintenanceApiBaseUrl}api/maintenance/{id}");
+                $"{GatewayBaseUrl}gateway/maintenance/api/maintenance/{id}");
 
             if (record == null)
                 return NotFound();
