@@ -16,9 +16,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
             _configuration = configuration;
         }
 
-        private string CustomerApiBaseUrl => _configuration["ApiSettings:CustomerApiBaseUrl"]!;
-        private string VehicleApiBaseUrl => _configuration["ApiSettings:VehicleApiBaseUrl"]!;
-        private string ReservationApiBaseUrl => _configuration["ApiSettings:ReservationApiBaseUrl"]!;
+        private string GatewayBaseUrl => _configuration["ApiSettings:GatewayBaseUrl"]!;
 
         public async Task<IActionResult> Index()
         {
@@ -62,7 +60,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
             };
 
             var response = await client.PostAsJsonAsync(
-                $"{ReservationApiBaseUrl}api/G3Reservation",
+                $"{GatewayBaseUrl}gateway/reservations/api/G3Reservation",
                 requestBody);
 
             if (!response.IsSuccessStatusCode)
@@ -101,7 +99,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
             var client = _httpClientFactory.CreateClient();
 
             var response = await client.PutAsync(
-                $"{ReservationApiBaseUrl}api/G3Reservation/{id}/cancel",
+                $"{GatewayBaseUrl}gateway/reservations/api/G3Reservation/{id}/cancel",
                 null);
 
             if (!response.IsSuccessStatusCode)
@@ -121,13 +119,13 @@ namespace G3_CarRentalApplication.MVC.Controllers
             var client = _httpClientFactory.CreateClient();
 
             var reservations = await client.GetFromJsonAsync<List<ReservationApiModel>>(
-                $"{ReservationApiBaseUrl}api/G3Reservation") ?? new List<ReservationApiModel>();
+                $"{GatewayBaseUrl}gateway/reservations/api/G3Reservation") ?? new List<ReservationApiModel>();
 
             var customers = await client.GetFromJsonAsync<List<CustomerViewModel>>(
-                $"{CustomerApiBaseUrl}api/G3Customer") ?? new List<CustomerViewModel>();
+                $"{GatewayBaseUrl}gateway/customers/api/G3Customer") ?? new List<CustomerViewModel>();
 
             var vehicles = await client.GetFromJsonAsync<List<VehicleViewModel>>(
-                $"{VehicleApiBaseUrl}api/Vehicles") ?? new List<VehicleViewModel>();
+                $"{GatewayBaseUrl}gateway/vehicles/api/Vehicles") ?? new List<VehicleViewModel>();
 
             return reservations.Select(r =>
             {
@@ -157,10 +155,10 @@ namespace G3_CarRentalApplication.MVC.Controllers
             var client = _httpClientFactory.CreateClient();
 
             var customers = await client.GetFromJsonAsync<List<CustomerViewModel>>(
-                $"{CustomerApiBaseUrl}api/G3Customer") ?? new List<CustomerViewModel>();
+                $"{GatewayBaseUrl}gateway/customers/api/G3Customer") ?? new List<CustomerViewModel>();
 
             var vehicles = await client.GetFromJsonAsync<List<VehicleViewModel>>(
-                $"{VehicleApiBaseUrl}api/Vehicles") ?? new List<VehicleViewModel>();
+                $"{GatewayBaseUrl}gateway/vehicles/api/Vehicles") ?? new List<VehicleViewModel>();
 
             model.Customers = customers.Select(c => new SelectListItem
             {
