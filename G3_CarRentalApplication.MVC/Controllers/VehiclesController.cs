@@ -15,14 +15,14 @@ namespace G3_CarRentalApplication.MVC.Controllers
             _configuration = configuration;
         }
 
-        private string VehicleApiBaseUrl => _configuration["ApiSettings:VehicleApiBaseUrl"]!;
+        private string GatewayBaseUrl => _configuration["ApiSettings:GatewayBaseUrl"]!;
 
         public async Task<IActionResult> Index()
         {
             var client = _httpClientFactory.CreateClient();
 
             var vehicles = await client.GetFromJsonAsync<List<VehicleViewModel>>(
-                $"{VehicleApiBaseUrl}api/Vehicles");
+                $"{GatewayBaseUrl}gateway/vehicles/api/Vehicles");
 
             return View(vehicles ?? new List<VehicleViewModel>());
         }
@@ -48,7 +48,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
                 vehicleType = model.VehicleType
             };
 
-            var response = await client.PostAsJsonAsync($"{VehicleApiBaseUrl}api/Vehicles", createBody);
+            var response = await client.PostAsJsonAsync($"{GatewayBaseUrl}gateway/vehicles/api/Vehicles", createBody);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -66,7 +66,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
             var client = _httpClientFactory.CreateClient();
 
             var vehicle = await client.GetFromJsonAsync<VehicleViewModel>(
-                $"{VehicleApiBaseUrl}api/Vehicles/{id}");
+                $"{GatewayBaseUrl}gateway/vehicles/api/Vehicles/{id}");
 
             if (vehicle == null)
                 return NotFound();
@@ -89,7 +89,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
             };
 
             var response = await client.PutAsJsonAsync(
-                $"{VehicleApiBaseUrl}api/Vehicles/{model.Id}/status",
+                $"{GatewayBaseUrl}gateway/vehicles/api/Vehicles/{model.Id}/status",
                 updateBody);
 
             if (!response.IsSuccessStatusCode)
@@ -108,7 +108,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
             var client = _httpClientFactory.CreateClient();
 
             var vehicle = await client.GetFromJsonAsync<VehicleViewModel>(
-                $"{VehicleApiBaseUrl}api/Vehicles/{id}");
+                $"{GatewayBaseUrl}gateway/vehicles/api/Vehicles/{id}");
 
             if (vehicle == null)
                 return NotFound();
@@ -122,7 +122,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
         {
             var client = _httpClientFactory.CreateClient();
 
-            var response = await client.DeleteAsync($"{VehicleApiBaseUrl}api/Vehicles/{id}");
+            var response = await client.DeleteAsync($"{GatewayBaseUrl}gateway/vehicles/api/Vehicles/{id}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -139,7 +139,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
             var client = _httpClientFactory.CreateClient();
 
             var vehicle = await client.GetFromJsonAsync<VehicleViewModel>(
-                $"{VehicleApiBaseUrl}api/Vehicles/{id}");
+                $"{GatewayBaseUrl}gateway/vehicles/api/Vehicles/{id}");
 
             if (vehicle == null)
                 return NotFound();
