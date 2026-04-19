@@ -4,13 +4,12 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddDbContext<G3CustomerDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        x => x.MigrationsHistoryTable("__EFMigrationsHistory", "customer"))); 
+        x => x.MigrationsHistoryTable("__EFMigrationsHistory", "customer")));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -25,6 +24,23 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Allow only requests coming through API Gateway
+app.Use(async (context, next) =>
+{
+    var expectedSecret = builder.Configuration["GatewayAccess:InternalSecret"];
+
+    if (!context.Request.Headers.TryGetValue("X-Internal-Gateway", out var providedSecret) ||
+        string.IsNullOrWhiteSpace(expectedSecret) ||
+        providedSecret != expectedSecret)
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        await context.Response.WriteAsync("Unauthorized: Direct API access is not allowed.");
+        return;
+    }
+
+    await next();
+});
 
 app.UseAuthorization();
 

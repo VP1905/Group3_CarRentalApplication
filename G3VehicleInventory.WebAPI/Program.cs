@@ -5,7 +5,6 @@ using G3VehicleInventory.Infrastructure.Data;
 using G3VehicleInventory.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add Controllers
@@ -34,6 +33,23 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Allow only requests coming through API Gateway
+app.Use(async (context, next) =>
+{
+    var expectedSecret = builder.Configuration["GatewayAccess:InternalSecret"];
+
+    if (!context.Request.Headers.TryGetValue("X-Internal-Gateway", out var providedSecret) ||
+        string.IsNullOrWhiteSpace(expectedSecret) ||
+        providedSecret != expectedSecret)
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        await context.Response.WriteAsync("Unauthorized: Direct API access is not allowed.");
+        return;
+    }
+
+    await next();
+});
 
 app.UseAuthorization();
 
