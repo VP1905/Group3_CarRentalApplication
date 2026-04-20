@@ -4,3 +4,10 @@ services:
     build:
       context: .
       dockerfile: G3_CarRentalApplication.Gateway/Dockerfile
+
+  g3_carrentalapplication.mvc:
+    image: ${DOCKER_REGISTRY-}g3carrentalapplicationmvc
+    build:
+      context: .
+      dockerfile: G3_CarRentalApplication.MVC/Dockerfile
+

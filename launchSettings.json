@@ -4,7 +4,8 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "g3_carrentalapplication.gateway": "StartDebugging"
+        "g3_carrentalapplication.gateway": "StartDebugging",
+        "g3_carrentalapplication.mvc": "StartDebugging"
       }
     }
   }
