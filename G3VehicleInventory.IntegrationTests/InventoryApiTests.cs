@@ -13,6 +13,7 @@ namespace G3VehicleInventory.IntegrationTests
         {
             _client = factory.CreateClient();
             _client.DefaultRequestHeaders.Add("X-Internal-Gateway", "MY_GATEWAY_SECRET_KEY");
+            _client.DefaultRequestHeaders.Add("X-API-Key", "GR3SecretKey123");
         }
 
         [Fact]
