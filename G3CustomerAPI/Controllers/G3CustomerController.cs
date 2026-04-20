@@ -30,6 +30,7 @@ namespace G3CustomerAPI.Controllers
             var customer = await _context.Customers.FindAsync(id);
             if (customer == null)
                 return NotFound();
+
             return customer;
         }
 
@@ -40,6 +41,7 @@ namespace G3CustomerAPI.Controllers
             customer.CreatedAt = DateTime.UtcNow;
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
+
             return CreatedAtAction(nameof(GetCustomerById), new { id = customer.Id }, customer);
         }
 
@@ -60,8 +62,24 @@ namespace G3CustomerAPI.Controllers
             {
                 if (!_context.Customers.Any(e => e.Id == id))
                     return NotFound();
+
                 throw;
             }
+
+            return NoContent();
+        }
+
+        // DELETE: api/G3Customer/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCustomer(int id)
+        {
+            var customer = await _context.Customers.FindAsync(id);
+
+            if (customer == null)
+                return NotFound(new { message = $"Customer with ID {id} was not found." });
+
+            _context.Customers.Remove(customer);
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
