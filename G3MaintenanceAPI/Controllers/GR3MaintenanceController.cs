@@ -31,7 +31,14 @@ namespace G3MaintenanceAPI.Controllers
             try
             {
                 var client = _httpClientFactory.CreateClient();
-                var response = await client.GetAsync($"{VehicleApiBaseUrl}api/vehicles/{vehicleId}");
+
+                client.DefaultRequestHeaders.Remove("X-Internal-Gateway");
+                client.DefaultRequestHeaders.Remove("X-API-Key");
+
+                client.DefaultRequestHeaders.Add("X-Internal-Gateway", _configuration["GatewayAccess:InternalSecret"]!);
+                client.DefaultRequestHeaders.Add("X-API-Key", _configuration["ApiSettings:ApiKey"]!);
+
+                var response = await client.GetAsync($"{VehicleApiBaseUrl}api/Vehicles/{vehicleId}");
                 return response.IsSuccessStatusCode;
             }
             catch
@@ -39,7 +46,6 @@ namespace G3MaintenanceAPI.Controllers
                 return false;
             }
         }
-
         // GET: api/maintenance
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GR3RepairHistoryDto>>> GetAll()

@@ -138,7 +138,8 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                TempData["ErrorMessage"] = "Unable to delete vehicle.";
+                var error = await response.Content.ReadAsStringAsync();
+                TempData["ErrorMessage"] = $"Unable to delete vehicle. {error}";
                 return RedirectToAction(nameof(Index));
             }
 

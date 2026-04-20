@@ -63,20 +63,21 @@ namespace G3ReservationAPI.Controllers
             var vehicleApiBase = _configuration["ServiceUrls:VehicleApi"];
 
             var client = _httpClientFactory.CreateClient();
-            client.DefaultRequestHeaders.Remove("X-Internal-Gateway");
-            client.DefaultRequestHeaders.Add("X-Internal-Gateway", _configuration["GatewayAccess:InternalSecret"]!);
 
-            // Check customer exists
+            client.DefaultRequestHeaders.Remove("X-Internal-Gateway");
+            client.DefaultRequestHeaders.Remove("X-API-Key");
+
+            client.DefaultRequestHeaders.Add("X-Internal-Gateway", _configuration["GatewayAccess:InternalSecret"]!);
+            client.DefaultRequestHeaders.Add("X-API-Key", _configuration["ApiSettings:ApiKey"]!);
+
             var customerResponse = await client.GetAsync($"{customerApiBase}/api/G3Customer/{reservation.CustomerId}");
             if (!customerResponse.IsSuccessStatusCode)
                 return BadRequest("Customer does not exist.");
 
-            // Check vehicle exists
             var vehicleResponse = await client.GetAsync($"{vehicleApiBase}/api/Vehicles/{reservation.VehicleId}");
             if (!vehicleResponse.IsSuccessStatusCode)
                 return BadRequest("Vehicle does not exist.");
 
-            // Check if vehicle is already reserved
             bool isReserved = await _context.Reservations
                 .AnyAsync(r => r.VehicleId == reservation.VehicleId && r.Status == "Active");
 
