@@ -25,3 +25,10 @@ services:
       context: .
       dockerfile: G3CustomerAPI/Dockerfile
 
+
+  g3maintenanceapi:
+    image: ${DOCKER_REGISTRY-}g3maintenanceapi
+    build:
+      context: .
+      dockerfile: G3MaintenanceAPI/Dockerfile
+
