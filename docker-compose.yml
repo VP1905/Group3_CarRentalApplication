@@ -18,3 +18,10 @@ services:
       context: .
       dockerfile: G3VehicleInventory.WebAPI/Dockerfile
 
+
+  g3customerapi:
+    image: ${DOCKER_REGISTRY-}g3customerapi
+    build:
+      context: .
+      dockerfile: G3CustomerAPI/Dockerfile
+
