@@ -17,6 +17,15 @@ namespace G3_CarRentalApplication.MVC.Controllers
         }
 
         private string GatewayBaseUrl => _configuration["ApiSettings:GatewayBaseUrl"]!;
+        private string ApiKey => _configuration["ApiSettings:ApiKey"]!;
+
+        private HttpClient CreateGatewayClient()
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Remove("X-API-Key");
+            client.DefaultRequestHeaders.Add("X-API-Key", ApiKey);
+            return client;
+        }
 
         public async Task<IActionResult> Index()
         {
@@ -48,7 +57,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
                 return View(model);
             }
 
-            var client = _httpClientFactory.CreateClient();
+            var client = CreateGatewayClient();
 
             var requestBody = new
             {
@@ -96,7 +105,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Cancel(int id)
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = CreateGatewayClient();
 
             var response = await client.PutAsync(
                 $"{GatewayBaseUrl}gateway/reservations/api/G3Reservation/{id}/cancel",
@@ -116,7 +125,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
         private async Task<List<ReservationHistoryViewModel>> BuildReservationHistoryAsync()
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = CreateGatewayClient();
 
             var reservations = await client.GetFromJsonAsync<List<ReservationApiModel>>(
                 $"{GatewayBaseUrl}gateway/reservations/api/G3Reservation") ?? new List<ReservationApiModel>();
@@ -152,7 +161,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
         private async Task LoadApiData(ReservationPageViewModel model)
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = CreateGatewayClient();
 
             var customers = await client.GetFromJsonAsync<List<CustomerViewModel>>(
                 $"{GatewayBaseUrl}gateway/customers/api/G3Customer") ?? new List<CustomerViewModel>();

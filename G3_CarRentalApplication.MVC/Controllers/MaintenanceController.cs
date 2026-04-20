@@ -16,10 +16,19 @@ namespace G3_CarRentalApplication.MVC.Controllers
         }
 
         private string GatewayBaseUrl => _configuration["ApiSettings:GatewayBaseUrl"]!;
+        private string ApiKey => _configuration["ApiSettings:ApiKey"]!;
+
+        private HttpClient CreateGatewayClient()
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Remove("X-API-Key");
+            client.DefaultRequestHeaders.Add("X-API-Key", ApiKey);
+            return client;
+        }
 
         public async Task<IActionResult> Index()
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = CreateGatewayClient();
 
             var records = await client.GetFromJsonAsync<List<MaintenanceViewModel>>(
                 $"{GatewayBaseUrl}gateway/maintenance/api/maintenance");
@@ -42,9 +51,11 @@ namespace G3_CarRentalApplication.MVC.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var client = _httpClientFactory.CreateClient();
+            var client = CreateGatewayClient();
 
-            var response = await client.PostAsJsonAsync($"{GatewayBaseUrl}gateway/maintenance/api/maintenance", model);
+            var response = await client.PostAsJsonAsync(
+                $"{GatewayBaseUrl}gateway/maintenance/api/maintenance",
+                model);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -58,7 +69,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = CreateGatewayClient();
 
             var record = await client.GetFromJsonAsync<MaintenanceViewModel>(
                 $"{GatewayBaseUrl}gateway/maintenance/api/maintenance/{id}");
@@ -76,9 +87,11 @@ namespace G3_CarRentalApplication.MVC.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var client = _httpClientFactory.CreateClient();
+            var client = CreateGatewayClient();
 
-            var response = await client.PutAsJsonAsync($"{GatewayBaseUrl}gateway/maintenance/api/maintenance/{model.Id}", model);
+            var response = await client.PutAsJsonAsync(
+                $"{GatewayBaseUrl}gateway/maintenance/api/maintenance/{model.Id}",
+                model);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -92,7 +105,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = CreateGatewayClient();
 
             var record = await client.GetFromJsonAsync<MaintenanceViewModel>(
                 $"{GatewayBaseUrl}gateway/maintenance/api/maintenance/{id}");
@@ -107,9 +120,10 @@ namespace G3_CarRentalApplication.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = CreateGatewayClient();
 
-            var response = await client.DeleteAsync($"{GatewayBaseUrl}gateway/maintenance/api/maintenance/{id}");
+            var response = await client.DeleteAsync(
+                $"{GatewayBaseUrl}gateway/maintenance/api/maintenance/{id}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -123,7 +137,7 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = CreateGatewayClient();
 
             var record = await client.GetFromJsonAsync<MaintenanceViewModel>(
                 $"{GatewayBaseUrl}gateway/maintenance/api/maintenance/{id}");

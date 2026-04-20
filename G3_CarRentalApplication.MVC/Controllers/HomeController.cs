@@ -16,32 +16,37 @@ namespace G3_CarRentalApplication.MVC.Controllers
         }
 
         private string GatewayBaseUrl => _configuration["ApiSettings:GatewayBaseUrl"]!;
+        private string ApiKey => _configuration["ApiSettings:ApiKey"]!;
+
+        private HttpClient CreateGatewayClient()
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Remove("X-API-Key");
+            client.DefaultRequestHeaders.Add("X-API-Key", ApiKey);
+            return client;
+        }
 
         public async Task<IActionResult> Index()
         {
             var model = new DashboardViewModel();
-            var client = _httpClientFactory.CreateClient();
+            var client = CreateGatewayClient();
 
             try
             {
-                // Customers
                 var customers = await client.GetFromJsonAsync<List<CustomerViewModel>>(
                     $"{GatewayBaseUrl}gateway/customers/api/G3Customer");
                 model.TotalCustomers = customers?.Count ?? 0;
 
-                // Vehicles
                 var vehicles = await client.GetFromJsonAsync<List<VehicleViewModel>>(
                     $"{GatewayBaseUrl}gateway/vehicles/api/Vehicles");
                 model.AvailableVehicles = vehicles?.Count(v =>
-                    v.Status != null &&
+                    !string.IsNullOrWhiteSpace(v.Status) &&
                     v.Status.Equals("Available", StringComparison.OrdinalIgnoreCase)) ?? 0;
 
-                // Maintenance
                 var maintenanceRecords = await client.GetFromJsonAsync<List<MaintenanceViewModel>>(
                     $"{GatewayBaseUrl}gateway/maintenance/api/maintenance");
                 model.TotalMaintenanceJobs = maintenanceRecords?.Count ?? 0;
 
-                // Reservations
                 var reservations = await client.GetFromJsonAsync<List<ReservationApiModel>>(
                     $"{GatewayBaseUrl}gateway/reservations/api/G3Reservation");
                 model.TotalReservations = reservations?.Count ?? 0;
