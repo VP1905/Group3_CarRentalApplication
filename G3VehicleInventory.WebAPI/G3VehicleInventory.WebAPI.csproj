@@ -18,6 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\G3SharedKernel\G3SharedKernel.csproj" />
 		<ProjectReference Include="..\G3VehicleInventory.Application\G3VehicleInventory.Application.csproj" />
 		<ProjectReference Include="..\G3VehicleInventory.Infrastructure\G3VehicleInventory.Infrastructure.csproj" />
 	</ItemGroup>
