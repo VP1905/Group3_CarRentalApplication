@@ -251,3 +251,51 @@ main {
     text-align: center;
     margin-top: 40px;
 }
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+}
+
+    .action-buttons form {
+        margin: 0;
+        width: 100%;
+    }
+
+.btn-action {
+    display: inline-block;
+    width: 95px;
+    text-align: center;
+    padding: 8px 10px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+    transition: 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+    .btn-action:hover {
+        transform: translateY(-1px);
+        opacity: 0.92;
+    }
+
+/* Colors */
+.btn-info-custom {
+    background: #14b8d4;
+}
+
+.btn-primary-custom {
+    background: #2563eb;
+}
+
+.btn-danger-custom {
+    background: #dc2626;
+}
+
+.btn-dark-custom {
+    background: #1f2937;
+}

@@ -122,7 +122,47 @@ namespace G3_CarRentalApplication.MVC.Controllers
 
             return RedirectToAction(nameof(History));
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var client = CreateGatewayClient();
 
+            var response = await client.DeleteAsync(
+                $"{GatewayBaseUrl}gateway/reservations/api/G3Reservation/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["ErrorMessage"] = "Unable to delete reservation.";
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Reservation deleted successfully.";
+            }
+
+            return RedirectToAction(nameof(History));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateStatus(int id, string status)
+        {
+            var client = CreateGatewayClient();
+
+            var response = await client.PutAsJsonAsync(
+                $"{GatewayBaseUrl}gateway/reservations/api/G3Reservation/{id}/status",
+                new { status });
+
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["ErrorMessage"] = $"Unable to update reservation to {status}.";
+            }
+            else
+            {
+                TempData["SuccessMessage"] = $"Reservation marked as {status}.";
+            }
+
+            return RedirectToAction(nameof(History));
+        }
         private async Task<List<ReservationHistoryViewModel>> BuildReservationHistoryAsync()
         {
             var client = CreateGatewayClient();

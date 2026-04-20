@@ -104,5 +104,34 @@ namespace G3ReservationAPI.Controllers
             await _context.SaveChangesAsync();
             return Ok(reservation);
         }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteReservation(int id)
+        {
+            var reservation = await _context.Reservations.FindAsync(id);
+
+            if (reservation == null)
+                return NotFound(new { message = "Reservation not found." });
+
+            _context.Reservations.Remove(reservation);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateReservationStatusDto dto)
+        {
+            if (dto == null || string.IsNullOrWhiteSpace(dto.Status))
+                return BadRequest(new { message = "Status is required." });
+
+            var reservation = await _context.Reservations.FindAsync(id);
+
+            if (reservation == null)
+                return NotFound(new { message = "Reservation not found." });
+
+            reservation.Status = dto.Status;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }

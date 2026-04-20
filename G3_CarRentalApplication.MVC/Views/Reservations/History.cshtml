@@ -47,19 +47,48 @@
                                 <td>@item.ReservationEndDate.ToString("yyyy-MM-dd")</td>
                                 <td>@item.ReservationStatus</td>
                                 <td>
-                                    <a asp-action="Details" asp-route-id="@item.ReservationId" class="btn btn-sm btn-info text-white">
-                                        Details
-                                    </a>
+                                    <div class="action-buttons">
 
-                                    @if (item.ReservationStatus == "Active")
-                                    {
-                                        <form asp-action="Cancel" asp-route-id="@item.ReservationId" method="post" class="d-inline">
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-sm btn-danger">
-                                                Cancel
-                                            </button>
-                                        </form>
-                                    }
+                                        <a asp-action="Details"
+                                           asp-route-id="@item.ReservationId"
+                                           class="btn-action btn-info-custom">
+                                            Details
+                                        </a>
+
+                                        @if (item.ReservationStatus == "Confirmed")
+                                        {
+                                            <form asp-action="UpdateStatus" method="post">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@item.ReservationId" />
+                                                <input type="hidden" name="status" value="Active" />
+                                                <button type="submit" class="btn-action btn-primary-custom">
+                                                    Activate
+                                                </button>
+                                            </form>
+
+                                            <form asp-action="UpdateStatus" method="post">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@item.ReservationId" />
+                                                <input type="hidden" name="status" value="Cancelled" />
+                                                <button type="submit" class="btn-action btn-danger-custom">
+                                                    Cancel
+                                                </button>
+                                            </form>
+                                        }
+
+                                        @if (item.ReservationStatus == "Active")
+                                        {
+                                            <form asp-action="UpdateStatus" method="post">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@item.ReservationId" />
+                                                <input type="hidden" name="status" value="Completed" />
+                                                <button type="submit" class="btn-action btn-dark-custom">
+                                                    Complete
+                                                </button>
+                                            </form>
+                                        }
+
+                                    </div>
                                 </td>
                             </tr>
                         }
