@@ -29,13 +29,10 @@ builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 var app = builder.Build();
 
 // Swagger
-if (app.Environment.IsDevelopment())
-{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
 
-app.UseHttpsRedirection();
+
 app.UseGR3GlobalExceptionMiddleware();
 app.UseGR3ApiKeyMiddleware();
 
