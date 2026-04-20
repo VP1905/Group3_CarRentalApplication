@@ -32,3 +32,10 @@ services:
       context: .
       dockerfile: G3MaintenanceAPI/Dockerfile
 
+
+  g3reservationapi:
+    image: ${DOCKER_REGISTRY-}g3reservationapi
+    build:
+      context: .
+      dockerfile: G3ReservationAPI/Dockerfile
+
