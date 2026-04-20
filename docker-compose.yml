@@ -1,0 +1,6 @@
+services:
+  g3_carrentalapplication.gateway:
+    image: ${DOCKER_REGISTRY-}g3carrentalapplicationgateway
+    build:
+      context: .
+      dockerfile: G3_CarRentalApplication.Gateway/Dockerfile
