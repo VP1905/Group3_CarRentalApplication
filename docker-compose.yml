@@ -1,4 +1,5 @@
 services:
+  # SQL Server container
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: g3-sqlserver
@@ -9,46 +10,107 @@ services:
       - "1433:1433"
     volumes:
       - sql_data:/var/opt/mssql
+
+  # API Gateway
   g3_carrentalapplication.gateway:
     image: ${DOCKER_REGISTRY-}g3carrentalapplicationgateway
+    container_name: g3-gateway
     build:
       context: .
       dockerfile: G3_CarRentalApplication.Gateway/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: "http://+:8080"
+    ports:
+      - "7000:8080"
+    depends_on:
+      - g3customerapi
+      - g3vehicleinventory.webapi
+      - g3reservationapi
+      - g3maintenanceapi
 
+  # MVC Client
   g3_carrentalapplication.mvc:
     image: ${DOCKER_REGISTRY-}g3carrentalapplicationmvc
+    container_name: g3-mvc
     build:
       context: .
       dockerfile: G3_CarRentalApplication.MVC/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: "http://+:8080"
+      ApiSettings__GatewayBaseUrl: "http://g3_carrentalapplication.gateway:8080/"
+      ApiSettings__ApiKey: "GR3SecretKey123"
+    ports:
+      - "8081:8080"
+    depends_on:
+      - g3_carrentalapplication.gateway
 
-
+  # Inventory API
   g3vehicleinventory.webapi:
     image: ${DOCKER_REGISTRY-}g3vehicleinventorywebapi
+    container_name: g3-vehicleinventory-api
     build:
       context: .
       dockerfile: G3VehicleInventory.WebAPI/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: "http://+:8080"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=G3InventoryDB;User Id=sa;Password=VanshitaP@19;TrustServerCertificate=True;Encrypt=False"
+    ports:
+      - "8082:8080"
+    depends_on:
+      - sqlserver
 
-
+  # Customer API
   g3customerapi:
     image: ${DOCKER_REGISTRY-}g3customerapi
+    container_name: g3-customer-api
     build:
       context: .
       dockerfile: G3CustomerAPI/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: "http://+:8080"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=G3CustomerDB;User Id=sa;Password=VanshitaP@19;TrustServerCertificate=True;Encrypt=False"
+    ports:
+      - "8083:8080"
+    depends_on:
+      - sqlserver
 
-
+  # Maintenance API
   g3maintenanceapi:
     image: ${DOCKER_REGISTRY-}g3maintenanceapi
+    container_name: g3-maintenance-api
     build:
       context: .
       dockerfile: G3MaintenanceAPI/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: "http://+:8080"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=G3MaintenanceDB;User Id=sa;Password=VanshitaP@19;TrustServerCertificate=True;Encrypt=False"
+    ports:
+      - "8084:8080"
+    depends_on:
+      - sqlserver
 
-
+  # Reservation API
   g3reservationapi:
     image: ${DOCKER_REGISTRY-}g3reservationapi
+    container_name: g3-reservation-api
     build:
       context: .
       dockerfile: G3ReservationAPI/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: "http://+:8080"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=G3ReservationDB;User Id=sa;Password=VanshitaP@19;TrustServerCertificate=True;Encrypt=False"
+    ports:
+      - "8085:8080"
+    depends_on:
+      - sqlserver
+      - g3customerapi
+      - g3vehicleinventory.webapi
 
 volumes:
   sql_data:
-

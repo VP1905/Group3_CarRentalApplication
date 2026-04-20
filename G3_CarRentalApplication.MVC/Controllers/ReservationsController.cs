@@ -167,14 +167,39 @@ namespace G3_CarRentalApplication.MVC.Controllers
         {
             var client = CreateGatewayClient();
 
-            var reservations = await client.GetFromJsonAsync<List<ReservationApiModel>>(
-                $"{GatewayBaseUrl}gateway/reservations/api/G3Reservation") ?? new List<ReservationApiModel>();
+            var reservationsUrl = $"{GatewayBaseUrl}gateway/reservations/api/G3Reservation";
+            var customersUrl = $"{GatewayBaseUrl}gateway/customers/api/G3Customer";
+            var vehiclesUrl = $"{GatewayBaseUrl}gateway/vehicles/api/Vehicles";
 
-            var customers = await client.GetFromJsonAsync<List<CustomerViewModel>>(
-                $"{GatewayBaseUrl}gateway/customers/api/G3Customer") ?? new List<CustomerViewModel>();
+            var reservationsResponse = await client.GetAsync(reservationsUrl);
+            if (!reservationsResponse.IsSuccessStatusCode)
+            {
+                var error = await reservationsResponse.Content.ReadAsStringAsync();
+                throw new Exception($"Reservations API failed: {(int)reservationsResponse.StatusCode} - {error}");
+            }
 
-            var vehicles = await client.GetFromJsonAsync<List<VehicleViewModel>>(
-                $"{GatewayBaseUrl}gateway/vehicles/api/Vehicles") ?? new List<VehicleViewModel>();
+            var customersResponse = await client.GetAsync(customersUrl);
+            if (!customersResponse.IsSuccessStatusCode)
+            {
+                var error = await customersResponse.Content.ReadAsStringAsync();
+                throw new Exception($"Customers API failed: {(int)customersResponse.StatusCode} - {error}");
+            }
+
+            var vehiclesResponse = await client.GetAsync(vehiclesUrl);
+            if (!vehiclesResponse.IsSuccessStatusCode)
+            {
+                var error = await vehiclesResponse.Content.ReadAsStringAsync();
+                throw new Exception($"Vehicles API failed: {(int)vehiclesResponse.StatusCode} - {error}");
+            }
+
+            var reservations = await reservationsResponse.Content.ReadFromJsonAsync<List<ReservationApiModel>>()
+                              ?? new List<ReservationApiModel>();
+
+            var customers = await customersResponse.Content.ReadFromJsonAsync<List<CustomerViewModel>>()
+                           ?? new List<CustomerViewModel>();
+
+            var vehicles = await vehiclesResponse.Content.ReadFromJsonAsync<List<VehicleViewModel>>()
+                          ?? new List<VehicleViewModel>();
 
             return reservations.Select(r =>
             {
@@ -198,7 +223,6 @@ namespace G3_CarRentalApplication.MVC.Controllers
                 };
             }).ToList();
         }
-
         private async Task LoadApiData(ReservationPageViewModel model)
         {
             var client = CreateGatewayClient();
