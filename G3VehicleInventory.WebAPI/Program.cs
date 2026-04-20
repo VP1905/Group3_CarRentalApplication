@@ -4,6 +4,7 @@ using G3VehicleInventory.Domain.AggregatesModel.VehicleAggregate;
 using G3VehicleInventory.Infrastructure.Data;
 using G3VehicleInventory.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
+using G3SharedKernel.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ builder.Services.AddControllers();
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
 
 // SQL Server DbContext
 builder.Services.AddDbContext<InventoryDbContext>(options =>
@@ -33,6 +36,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseGR3GlobalExceptionMiddleware();
+app.UseGR3ApiKeyMiddleware();
 
 // Allow only requests coming through API Gateway
 app.Use(async (context, next) =>

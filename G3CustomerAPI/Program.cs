@@ -1,4 +1,5 @@
 using G3CustomerAPI.Data;
+using G3SharedKernel.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseGR3GlobalExceptionMiddleware();
+app.UseGR3ApiKeyMiddleware();
 
 // Allow only requests coming through API Gateway
 app.Use(async (context, next) =>
