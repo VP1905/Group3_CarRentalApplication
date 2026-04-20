@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System.Net.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace G3SharedKernel.Middleware
 {
