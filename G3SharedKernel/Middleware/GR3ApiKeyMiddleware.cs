@@ -16,6 +16,15 @@ namespace G3SharedKernel.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
+            var path = context.Request.Path.Value;
+
+            if (!string.IsNullOrEmpty(path) &&
+                (path.StartsWith("/swagger") || path == "/"))
+            {
+                await _next(context);
+                return;
+            }
+
             if (!context.Request.Headers.TryGetValue(ApiKeyHeaderName, out var extractedApiKey))
             {
                 context.Response.StatusCode = 401;
