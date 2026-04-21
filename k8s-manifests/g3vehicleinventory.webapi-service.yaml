@@ -6,7 +6,7 @@ metadata:
     kompose.version: 1.38.0 (a8f5d1cbd)
   labels:
     io.kompose.service: g3vehicleinventory-webapi
-  name: g3vehicleinventory.webapi
+  name: g3-vehicleinventory-webapi
 spec:
   ports:
     - name: "8082"

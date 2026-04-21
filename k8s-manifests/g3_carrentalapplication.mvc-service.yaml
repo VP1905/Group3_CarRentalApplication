@@ -6,7 +6,7 @@ metadata:
     kompose.version: 1.38.0 (a8f5d1cbd)
   labels:
     io.kompose.service: g3-carrentalapplication-mvc
-  name: g3_carrentalapplication.mvc
+  name: g3-carrentalapplication-mvc
 spec:
   ports:
     - name: "8081"
