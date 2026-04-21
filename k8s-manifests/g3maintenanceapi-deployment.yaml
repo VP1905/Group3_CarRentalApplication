@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert --out k8s-manifests
+    kompose.version: 1.38.0 (a8f5d1cbd)
+  labels:
+    io.kompose.service: g3maintenanceapi
+  name: g3maintenanceapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: g3maintenanceapi
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert --out k8s-manifests
+        kompose.version: 1.38.0 (a8f5d1cbd)
+      labels:
+        io.kompose.service: g3maintenanceapi
+    spec:
+      containers:
+        - env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: ASPNETCORE_URLS
+              value: http://+:8080
+            - name: ConnectionStrings__DefaultConnection
+              value: Server=sqlserver,1433;Database=G3MaintenanceDB;User Id=sa;Password=VanshitaP@19;TrustServerCertificate=True;Encrypt=False
+          image: g3maintenanceapi
+          name: g3-maintenance-api
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+      restartPolicy: Always
