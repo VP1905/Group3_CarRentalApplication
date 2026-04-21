@@ -59,8 +59,8 @@ namespace G3ReservationAPI.Controllers
             if (reservation.StartDate >= reservation.EndDate)
                 return BadRequest("Start date must be earlier than end date.");
 
-            var customerApiBase = _configuration["ServiceUrls:CustomerApi"];
-            var vehicleApiBase = _configuration["ServiceUrls:VehicleApi"];
+            var customerApiBase = _configuration["ServiceUrls:CustomerApi"]?.TrimEnd('/');
+            var vehicleApiBase = _configuration["ServiceUrls:VehicleApi"]?.TrimEnd('/');
 
             var client = _httpClientFactory.CreateClient();
 
