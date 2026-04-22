@@ -5,8 +5,47 @@ using G3VehicleInventory.Infrastructure.Data;
 using G3VehicleInventory.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using G3SharedKernel.Extensions;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var otlpEndpoint = builder.Configuration["OTLP:Endpoint"] ?? "http://localhost:4317";
+
+// Logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddOpenTelemetry(logging =>
+{
+    logging.IncludeFormattedMessage = true;
+    logging.IncludeScopes = true;
+    logging.AddOtlpExporter(o =>
+    {
+        o.Endpoint = new Uri(otlpEndpoint);
+    });
+});
+
+// OpenTelemetry
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracing =>
+    {
+        tracing.AddAspNetCoreInstrumentation();
+        tracing.AddHttpClientInstrumentation();
+        tracing.AddOtlpExporter(o =>
+        {
+            o.Endpoint = new Uri(otlpEndpoint);
+        });
+    })
+    .WithMetrics(metrics =>
+    {
+        metrics.AddAspNetCoreInstrumentation();
+        metrics.AddHttpClientInstrumentation();
+        metrics.AddOtlpExporter(o =>
+        {
+            o.Endpoint = new Uri(otlpEndpoint);
+        });
+    });
 
 // Add Controllers
 builder.Services.AddControllers();
@@ -14,8 +53,6 @@ builder.Services.AddControllers();
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-
 
 // SQL Server DbContext
 builder.Services.AddDbContext<InventoryDbContext>(options =>
@@ -28,15 +65,12 @@ builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 
 var app = builder.Build();
 
-// Swagger
-    app.UseSwagger();
-    app.UseSwaggerUI();
-
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseGR3GlobalExceptionMiddleware();
 app.UseGR3ApiKeyMiddleware();
 
-// Allow only requests coming through API Gateway
 app.Use(async (context, next) =>
 {
     var expectedSecret = builder.Configuration["GatewayAccess:InternalSecret"];
@@ -54,8 +88,7 @@ app.Use(async (context, next) =>
 });
 
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
+
 public partial class Program { }
