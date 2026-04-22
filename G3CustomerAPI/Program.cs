@@ -1,35 +1,46 @@
-using Azure.Monitor.OpenTelemetry.AspNetCore;
 using G3CustomerAPI.Data;
 using G3SharedKernel.Extensions;
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var otlpEndpoint = builder.Configuration["OTLP:Endpoint"] ?? "http://localhost:4317";
+
 // Logging
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+builder.Logging.AddOpenTelemetry(logging =>
+{
+    logging.IncludeFormattedMessage = true;
+    logging.IncludeScopes = true;
+    logging.AddOtlpExporter(o =>
+    {
+        o.Endpoint = new Uri(otlpEndpoint);
+    });
+});
 
-var appInsightsConnection = builder.Configuration["ApplicationInsights:ConnectionString"];
-
-var otelBuilder = builder.Services.AddOpenTelemetry()
+builder.Services.AddOpenTelemetry()
     .WithTracing(tracing =>
     {
         tracing.AddAspNetCoreInstrumentation();
         tracing.AddHttpClientInstrumentation();
+        tracing.AddOtlpExporter(o =>
+        {
+            o.Endpoint = new Uri(otlpEndpoint);
+        });
     })
     .WithMetrics(metrics =>
     {
         metrics.AddAspNetCoreInstrumentation();
         metrics.AddHttpClientInstrumentation();
+        metrics.AddOtlpExporter(o =>
+        {
+            o.Endpoint = new Uri(otlpEndpoint);
+        });
     });
-
-if (!string.IsNullOrWhiteSpace(appInsightsConnection) &&
-    appInsightsConnection != "PLACEHOLDER_FILL_AFTER_AZURE_SETUP")
-{
-    otelBuilder.UseAzureMonitor();
-}
 
 builder.Services.AddControllers();
 
